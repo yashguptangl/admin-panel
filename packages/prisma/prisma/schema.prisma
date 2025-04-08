@@ -226,6 +226,7 @@ model Admin {
   password String
   role     Role    @default(EMPLOYEE)
   verified Boolean @default(false)
+  username String
 }
 
 enum Role {
