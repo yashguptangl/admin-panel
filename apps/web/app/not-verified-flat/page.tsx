@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 export default function NotVerifiedFlat() {
     const router = useRouter();
     const [notVerified, setNotVerified] = useState<Flat[]>([]);
+    const [searchTerm, setSearchTerm] = useState("");
     interface Flat {
         id: number;
         city: string;
@@ -18,6 +19,12 @@ export default function NotVerifiedFlat() {
         MaxPrice: string;
         listingShowNo: string;
         location: string;
+        owner?: {
+            id: number;
+            username: string;
+            mobile: string;
+            email: string;
+        };
     }
 
     useEffect(() => {
@@ -55,53 +62,71 @@ export default function NotVerifiedFlat() {
                 {/* Main Content */}
                 <div className="flex-grow p-6">
                     {/* Agent Table */}
-                    <h2 className="text-xl font-semibold mb-4 text-center">Not Verified Flat List</h2>
+                    <div className="flex items-center justify-between mb-4">
+                        <h2 className="text-xl font-semibold text-center flex-1">Not Verified Flat List</h2>
+                        <input
+                            type="text"
+                            placeholder="Search by Name or Mobile"
+                            className="w-56 p-2 border border-gray-700 placeholder-gray-800 rounded ml-4"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
                     <div className="overflow-x-auto">
                         <table className="min-w-full border border-gray-300 bg-white shadow-md rounded-lg">
                             <thead className="bg-gray-200">
                                 <tr>
                                     <th className="border p-2 text-left">Sr No</th>
+                                    <th className="border p-2 text-left">Owner Name</th>
                                     <th className="border p-2 text-left">City</th>
                                     <th className="border p-2 text-left">Town Sector</th>
                                     <th className="border p-2 text-left">BHK</th>
-                                    <th className="border p-2 text-left">Min Price</th>
-                                    <th className="border p-2 text-left">Max Price</th>
+                                    <th className="border p-2 text-left">Price</th>
                                     <th className="border p-2 text-left">Location</th>
                                     <th className="border p-2 text-left">Mobile</th>
                                     <th className="border p-2 text-left">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {notVerified.length === 0 ? (
+                                {notVerified
+                                    .filter(flat =>
+                                        flat.owner?.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                        flat.owner?.mobile?.includes(searchTerm)
+                                    )
+                                    .length === 0 ? (
                                     <tr>
-                                        <td colSpan={8} className="border p-2 text-center">
+                                        <td colSpan={9} className="border p-2 text-center">
                                             No records found.
                                         </td>
                                     </tr>
                                 ) : (
-                                    notVerified.map((flat, index) => (
-                                        <tr key={flat.id} className="hover:bg-gray-100">
-                                            <td className="border p-2">{index + 1}</td>
-                                            <td className="border p-2">{flat.city}</td>
-                                            <td className="border p-2">{flat.townSector}</td>
-                                            <td className="border p-2">{flat.BHK}</td>
-                                            <td className="border p-2">{flat.MinPrice}</td>
-                                            <td className="border p-2">{flat.MaxPrice}</td>
-                                            <td className="border p-2">{flat.listingShowNo}</td>
-                                            <td className="border p-2">{flat.location}</td>
-
-                                            <td className="border p-2 text-center">
-                                                <button
-                                                    className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                                                    onClick={() => {
-                                                        router.push(`/not-verified-flat/${flat.id}`);
-                                                    }}
-                                                >
-                                                    Open
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))
+                                    notVerified
+                                        .filter(flat =>
+                                            flat.owner?.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                            flat.owner?.mobile?.includes(searchTerm)
+                                        )
+                                        .map((flat, index) => (
+                                            <tr key={flat.id} className="hover:bg-gray-100">
+                                                <td className="border p-2">{index + 1}</td>
+                                                <td className="border p-2">{flat.owner?.username || "-"}</td>
+                                                <td className="border p-2">{flat.city}</td>
+                                                <td className="border p-2">{flat.townSector}</td>
+                                                <td className="border p-2">{flat.BHK}</td>
+                                                <td className="border p-2">{flat.MinPrice} - {flat.MaxPrice}</td>
+                                                <td className="border p-2">{flat.location}</td>
+                                                <td className="border p-2">{flat.owner?.mobile || "-"}</td>
+                                                <td className="border p-2 text-center">
+                                                    <button
+                                                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                                                        onClick={() => {
+                                                            router.push(`/not-verified-flat/${flat.id}`);
+                                                        }}
+                                                    >
+                                                        Open
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))
                                 )}
                             </tbody>
                         </table>

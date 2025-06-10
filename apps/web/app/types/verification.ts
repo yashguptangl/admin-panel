@@ -14,4 +14,11 @@ export default interface VerifiedRequestItem {
     city: string;
     townSector: string;
     location: string;
+    owner ?: {
+        id: number;
+        username: string;
+        mobile: string;
+        email: string;
+    };
+    
 }

@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 export default function NotVerifiedPG() {
     const router = useRouter();
     const [notVerified, setNotVerified] = useState<PG[]>([]);
+    const [searchTerm, setSearchTerm] = useState("");
     interface PG {
         id: number;
         city: string;
@@ -18,6 +19,12 @@ export default function NotVerifiedPG() {
         MaxPrice: string;
         location: string;
         listingShowNo: string;
+        owner?: {
+            id: number;
+            username: string;
+            mobile: string;
+            email: string;
+        };
     }
 
     useEffect(() => {
@@ -55,53 +62,77 @@ export default function NotVerifiedPG() {
                 {/* Main Content */}
                 <div className="flex-grow p-6">
                     {/* Agent Table */}
-                    <h2 className="text-xl font-semibold mb-4 text-center">Not Verified PG List</h2>
+                    <div className="flex items-center justify-between mb-4">
+                        <h2 className="text-xl font-semibold text-center flex-1">Not Verified PG List</h2>
+                        <input
+                            type="text"
+                            placeholder="Search by Name or Mobile"
+                            className="w-56 p-2 border border-gray-700 placeholder-gray-800 rounded ml-4"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
                     <div className="overflow-x-auto">
                         <table className="min-w-full border border-gray-300 bg-white shadow-md rounded-lg">
                             <thead className="bg-gray-200">
                                 <tr>
                                     <th className="border p-2 text-left">Sr No</th>
+                                    <th className="border p-2 text-left">Owner Name</th>
                                     <th className="border p-2 text-left">City</th>
                                     <th className="border p-2 text-left">Town Sector</th>
                                     <th className="border p-2 text-left">BHK</th>
-                                    <th className="border p-2 text-left">Min Price</th>
-                                    <th className="border p-2 text-left">Max Price</th>
+                                    <th className="border p-2 text-left">Price</th>
                                     <th className="border p-2 text-left">Location</th>
                                     <th className="border p-2 text-left">Mobile</th>
                                     <th className="border p-2 text-left">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {notVerified.length === 0 ? (
+                                {notVerified
+                                    .filter(
+                                        (pg) =>
+                                            pg.owner?.username
+                                                ?.toLowerCase()
+                                                .includes(searchTerm.toLowerCase()) ||
+                                            pg.owner?.mobile
+                                                ?.toLowerCase()
+                                                .includes(searchTerm.toLowerCase()) ||
+                                            searchTerm.trim() === ""
+                                    )
+                                    .length === 0 ? (
                                     <tr>
-                                        <td colSpan={8} className="border p-2 text-center">
+                                        <td colSpan={9} className="border p-2 text-center">
                                             No records found.
                                         </td>
                                     </tr>
                                 ) : (
-                                    notVerified.map((pg, index) => (
-                                        <tr key={pg.id} className="hover:bg-gray-100">
-                                            <td className="border p-2">{index + 1}</td>
-                                            <td className="border p-2">{pg.city}</td>
-                                            <td className="border p-2">{pg.townSector}</td>
-                                            <td className="border p-2">{pg.BHK}</td>
-                                            <td className="border p-2">{pg.MinPrice}</td>
-                                            <td className="border p-2">{pg.MaxPrice}</td>
-                                            <td className="border p-2">{pg.location}</td>
-                                            <td className="border p-2">{pg.listingShowNo}</td>
-
-                                            <td className="border p-2 text-center">
-                                                <button
-                                                    className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                                                    onClick={() => {
-                                                        router.push(`/not-verified-pg/${pg.id}`);
-                                                    }}
-                                                >
-                                                    Open
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))
+                                    notVerified.filter((pg) =>
+                                                pg.owner?.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                                pg.owner?.mobile?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                                searchTerm.trim() === ""
+                                        )
+                                        .map((pg, index) => (
+                                            <tr key={pg.id} className="hover:bg-gray-100">
+                                                <td className="border p-2">{index + 1}</td>
+                                                <td className="border p-2">{pg.owner?.username || "-"}</td>
+                                                <td className="border p-2">{pg.city}</td>
+                                                <td className="border p-2">{pg.townSector}</td>
+                                                <td className="border p-2">{pg.BHK}</td>
+                                                <td className="border p-2">{pg.MinPrice} - {pg.MaxPrice}</td>
+                                                <td className="border p-2">{pg.location}</td>
+                                                <td className="border p-2">{pg.owner?.mobile || "-"}</td>
+                                                <td className="border p-2 text-center">
+                                                    <button
+                                                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                                                        onClick={() => {
+                                                            router.push(`/not-verified-pg/${pg.id}`);
+                                                        }}
+                                                    >
+                                                        Open
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))
                                 )}
                             </tbody>
                         </table>

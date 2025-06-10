@@ -20,7 +20,9 @@ export default function AgentVerified() {
                     token: localStorage.getItem("token"),
                 },
             });
-            // Support both array and object response
+            
+            // mereko apna esa chahie jaise hi agent verification m ownerId 
+
             const arr = Array.isArray(response.data)
                 ? response.data
                 : response.data.agentverifiedProperty || [];
@@ -54,10 +56,11 @@ export default function AgentVerified() {
                                 <tr>
                                     <th className="border p-2 text-left">#</th>
                                     <th className="border p-2 text-left">Listing Type</th>
+                                    <th className="border p-2 text-left">Owner Name</th>
                                     <th className="border p-2 text-left">City</th>
                                     <th className="border p-2 text-left">Town Sector</th>
                                     <th className="border p-2 text-left">Location</th>
-                                    <th className="border p-2 text-left">Listing Show No</th>
+                                    <th className="border p-2 text-left">Owner Contact No</th>
                                     <th className="border p-2 text-left">Status</th>
                                     <th className="border p-2 text-left">Actions</th>
                                 </tr>
@@ -74,10 +77,11 @@ export default function AgentVerified() {
                                         <tr key={agent.id} className="hover:bg-gray-100">
                                             <td className="border p-2">{index + 1}</td>
                                             <td className="border p-2 capitalize">{agent.listingType}</td>
+                                            <td className="border p-2 capitalize">{agent.owner?.username || "-"}</td>
                                             <td className="border p-2">{agent.city}</td>
                                             <td className="border p-2">{agent.townSector}</td>
                                             <td className="border p-2">{agent.location}</td>
-                                            <td className="border p-2">{agent.listingShowNo}</td>
+                                            <td className="border p-2">{agent.owner?.mobile || "-"}</td>
                                             <td className="border p-2">{agent.status}</td>
                                             <td className="border p-2 text-center">
                                                 <button
