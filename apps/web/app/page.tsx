@@ -117,15 +117,6 @@ export default function LoginSignup() {
                 {isSubmitting ? "Signing in..." : "Sign In"}
               </button>
             </form>
-            <div className="text-center mt-2">
-              <span className="font-normal">Create an Account &nbsp; </span>
-              <Link
-                href="/admin/signup"
-                className="hover:underline font-semibold text-blue-600"
-              >
-                Sign Up
-              </Link>
-            </div>
           </div>
         </div>
       </div>

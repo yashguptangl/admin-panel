@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "../../components/sidebar";
@@ -29,6 +28,7 @@ interface AgentData {
         aadharFront: string;
         aadharBack: string;
         pancard: string;
+        passbook: string;
     };
 }
 
@@ -41,6 +41,28 @@ export default function AgentDetails({ params }: AgentDetailsProps) {
     const router = useRouter();
     const [agent, setAgent] = useState<AgentData["agent"] | null>(null);
     const [kycDocuments, setKycDocuments] = useState<AgentData["kycDocuments"] | null>(null);
+    const [decoded , setDecoded] = useState<{ username: string } | null>(null);
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            try {
+                const payload = token.split('.')[1];
+                if (payload) {
+                    const jsonPayload = atob(payload);
+                    const decoded = JSON.parse(jsonPayload);
+                    setDecoded(decoded);
+                    console.log("Decoded token:", decoded);
+                } else {
+                    console.error("Token payload is undefined.");
+                }
+            } catch (err) {
+                console.error("Failed to decode token:", err);
+            }
+        }
+        console.log("Decoded token:", decoded);
+    }, []);
+
 
     useEffect(() => {
         if (!agentId) return;
@@ -69,6 +91,8 @@ export default function AgentDetails({ params }: AgentDetailsProps) {
         fetchAgentDetails();
     }, [agentId]);
 
+
+
     if (!agent || !kycDocuments) {
         return (
             <div className="flex flex-col min-h-screen bg-gray-50">
@@ -87,12 +111,13 @@ export default function AgentDetails({ params }: AgentDetailsProps) {
     }
     async function onClick(event: React.MouseEvent<HTMLButtonElement>){
         try {
-            const response = await fetch(`http://localhost:3001/api/v1/admin/agents/verify/?id=${agentId}`, {
+            const response = await fetch(`http://localhost:3001/api/v1/admin/agents/verify/?id=${agentId}&personverified=${decoded?.username}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                     token: localStorage.getItem("token") || "",
                 },
+
             });
             if(response.status === 200){
                 alert("Agent verified successfully");
@@ -187,12 +212,13 @@ export default function AgentDetails({ params }: AgentDetailsProps) {
                                 {/* KYC Documents */}
                                 <div className="bg-white rounded-lg shadow-sm p-6"></div>
                                     <h2 className="text-lg font-semibold mb-4 pb-2 border-b">KYC Documents</h2>
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                                         {[
                                             { label: "Agent Photo", key: "agentImage", url: kycDocuments.agentImage },
                                             { label: "Aadhar Front", key: "aadharFront", url: kycDocuments.aadharFront },
                                             { label: "Aadhar Back", key: "aadharBack", url: kycDocuments.aadharBack },
                                             { label: "PAN Card", key: "pancard", url: kycDocuments.pancard },
+                                            { label: "Passbook", key: "passbook", url: kycDocuments.passbook },
                                         ].map((item) => (
                                             <div key={item.key} className="text-center">
                                                 <label className="block text-sm font-medium text-gray-900 mb-2">
@@ -221,7 +247,7 @@ export default function AgentDetails({ params }: AgentDetailsProps) {
                                             </div>
                                         ))}
                                     </div>
-                            </div>
+                                </div>
                         </div>
 
                         {/* Verification Actions */}

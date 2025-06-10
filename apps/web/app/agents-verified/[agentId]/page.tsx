@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "../../components/sidebar";
@@ -29,6 +28,7 @@ interface AgentData {
         aadharFront: string;
         aadharBack: string;
         pancard: string;
+        passbook: string; // Optional field for passbook
     };
 }
 
@@ -187,12 +187,13 @@ export default function AgentDetails({ params }: AgentDetailsProps) {
                                 {/* KYC Documents */}
                                 <div className="bg-white rounded-lg shadow-sm p-6"></div>
                                     <h2 className="text-lg font-semibold mb-4 pb-2 border-b">KYC Documents</h2>
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                                         {[
                                             { label: "Agent Photo", key: "agentImage", url: kycDocuments.agentImage },
                                             { label: "Aadhar Front", key: "aadharFront", url: kycDocuments.aadharFront },
                                             { label: "Aadhar Back", key: "aadharBack", url: kycDocuments.aadharBack },
                                             { label: "PAN Card", key: "pancard", url: kycDocuments.pancard },
+                                            { label: "Passbook", key: "passbook", url: kycDocuments.passbook || "" },
                                         ].map((item) => (
                                             <div key={item.key} className="text-center">
                                                 <label className="block text-sm font-medium text-gray-900 mb-2">

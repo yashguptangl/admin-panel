@@ -71,21 +71,57 @@ const Sidebar = () => {
           className="flex items-center w-full p-2 hover:bg-gray-700 rounded"
           onClick={() => toggleMenu("property")}
         >
-          <FaHome className="mr-2" /> Property
+          <FaHome className="mr-2" /> Verification
         </button>
         {openMenus["property"] && (
           <div className="ml-6">
             <button
               className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
-              onClick={() => navigateTo("/admin/owners/self-verified")}
+              onClick={() => navigateTo("/self-verification")}
             >
-               Self Verified Property
+               Self Verification
             </button>
             <button
               className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
-              onClick={() => navigateTo("/admin/owners/agent-verified")}
+              onClick={() => navigateTo("/agent-verification")}
             >
-                Agent Verified Property
+                Agent Verification
+            </button>
+          </div>
+        )}
+      </div>
+      <div className="mt-4">
+        <button
+          className="flex items-center w-full p-2 hover:bg-gray-700 rounded"
+          onClick={() => toggleMenu("not-verified-property")}
+        >
+          <FaHome className="mr-2" /> Not Verified Property
+        </button>
+        {openMenus["not-verified-property"] && (
+          <div className="ml-6">
+            <button
+              className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+              onClick={() => navigateTo("/not-verified-flat")}
+            >
+              Not Verified Flat  
+            </button>
+            <button
+              className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+              onClick={() => navigateTo("/not-verified-pg")}
+            >
+              Not Verified PG
+            </button>
+            <button
+              className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+              onClick={() => navigateTo("/not-verified-room")}
+            >
+              Not Verified Room
+            </button>
+            <button
+              className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+              onClick={() => navigateTo("/not-verified-hourlyroom")}
+            >
+              Not Verified Hourly Room
             </button>
           </div>
         )}
