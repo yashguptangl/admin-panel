@@ -85,7 +85,6 @@ export default function AgentVerified() {
                                                     onClick={() => {
                                                         window.open(
                                                             `/agent-verification/id?id=${agent.id}&ownerId=${agent.ownerId}&listingType=${agent.listingType}&listingId=${agent.listingId}&agentId=${agent.agentId}`,
-                                                            '_blank'
                                                         );
                                                     }}
                                                 >

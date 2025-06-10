@@ -85,7 +85,6 @@ export default function SelfVerified() {
                                                     onClick={() => {
                                                         window.open(
                                                             `/self-verification/id?id=${self.id}&ownerId=${self.ownerId}&listingType=${self.listingType}&listingId=${self.listingId}`,
-                                                            '_blank'
                                                         );
                                                     }}
                                                 >
