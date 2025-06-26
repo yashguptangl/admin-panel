@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Header from "../components/header";
-import Footer from "../components/footer";
 import Sidebar from "../components/sidebar";
 import axios from 'axios';
 
@@ -18,7 +17,7 @@ export default function AdminUserTable() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/api/v1/admin/users", {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/admin/users`, {
           headers: {
             "Content-Type": "application/json",
             token: localStorage.getItem("token") || "",
@@ -73,7 +72,6 @@ export default function AdminUserTable() {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 }

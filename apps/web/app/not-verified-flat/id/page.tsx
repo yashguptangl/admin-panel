@@ -1,17 +1,15 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import Header from "../../components/header";
-import Footer from "../../components/footer";
 import Sidebar from "../../components/sidebar";
 import axios from "axios";
+import { useSearchParams } from "next/navigation";
 import FlatData from "../../types/data"; 
+import Image from "next/image";
 
-interface flatId {
-  params: Promise<{ id: number }>;
-}
-
-export default function FullNotVerifiedDetailsFlat({ params }: flatId) {
-  const { id } = React.use(params); // <-- Fix: unwrap params
+function FullNotVerifiedDetailsFlat() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
   const [data, setData] = useState<FlatData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -28,7 +26,7 @@ export default function FullNotVerifiedDetailsFlat({ params }: flatId) {
     async function fetchFlatDetails() {
       try {
         const response = await axios.get(
-          `http://localhost:3001/api/v1/admin/not-verified-flat-full-details/?id=${id}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/admin/not-verified-flat-full-details/?id=${id}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -353,7 +351,7 @@ export default function FullNotVerifiedDetailsFlat({ params }: flatId) {
                     rel="noopener noreferrer"
                     className="block w-full max-w-md mx-auto"
                   >
-                    <img
+                    <Image
                       src={imageArray[activeImageIndex]?.url || "/placeholder.png"}
                       alt={imageArray[activeImageIndex]?.label || "Property Image"}
                       className="w-full h-56 object-cover rounded-lg border"
@@ -373,7 +371,7 @@ export default function FullNotVerifiedDetailsFlat({ params }: flatId) {
                         }`}
                         type="button"
                       >
-                        <img
+                        <Image
                           src={image?.url || "/placeholder.png"}
                           alt={image?.label || "Property Image"}
                           className="object-cover w-full h-full"
@@ -387,7 +385,14 @@ export default function FullNotVerifiedDetailsFlat({ params }: flatId) {
           </div>
         </main>
       </div>
-      <Footer />
     </>
   );
 }
+
+const NotVerifiedFlatDetailsPage = () => (
+  <Suspense fallback={<div className="p-10 text-center">Loading...</div>}>
+    <FullNotVerifiedDetailsFlat />
+  </Suspense>
+);
+
+export default NotVerifiedFlatDetailsPage;

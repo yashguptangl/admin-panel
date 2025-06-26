@@ -1,20 +1,17 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Header from "../components/header";
-import Footer from "../components/footer";
 import Sidebar from "../components/sidebar";
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
 import VerifiedRequestItem from "../types/verification";
 
 export default function AgentVerified() {
-    const router = useRouter();
     const [agentVerified, setAgentVerified] = useState<VerifiedRequestItem[]>([]);
 
     useEffect(() => {
     const fetchAgentVerified = async () => {
         try {
-            const response = await axios.get("http://localhost:3001/api/v1/admin/agentverifiedProperty", {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/admin/agentverifiedProperty`, {
                 headers: {
                     "Content-Type": "application/json",
                     token: localStorage.getItem("token"),
@@ -103,7 +100,6 @@ export default function AgentVerified() {
                     </div>
                 </div>
             </div>
-            <Footer />
         </>
     )
 }

@@ -1,20 +1,17 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Header from "../components/header";
-import Footer from "../components/footer";
 import Sidebar from "../components/sidebar";
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
 import VerifiedRequestItem from "../types/verification"; // Adjust the import path as necessary
 
 export default function SelfVerified() {
-    const router = useRouter();
     const [selfVerified, setSelfVerified] = useState<VerifiedRequestItem[]>([]);
 
     useEffect(() => {
     const fetchSelfVerified = async () => {
         try {
-            const response = await axios.get("http://localhost:3001/api/v1/admin/not-selfverifiedProperty", {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/admin/not-selfverifiedProperty`, {
                 headers: {
                     "Content-Type": "application/json",
                     token: localStorage.getItem("token"),
@@ -101,7 +98,6 @@ export default function SelfVerified() {
                     </div>
                 </div>
             </div>
-            <Footer />
         </>
     )
 }

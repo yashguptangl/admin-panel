@@ -1,9 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Header from "../components/header";
-import Footer from "../components/footer";
 import Sidebar from "../components/sidebar";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
 export default function AdminOwnerTable() {
   interface Owner {
@@ -17,7 +16,7 @@ export default function AdminOwnerTable() {
   useEffect(() => {
     const fetchOwner = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/api/v1/admin/owner", {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/admin/owner`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -73,7 +72,7 @@ export default function AdminOwnerTable() {
           </div>
         </div>
       </div>
-      <Footer />
+    
     </>
   );
 }

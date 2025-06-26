@@ -1,13 +1,12 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import PropertyDetailsCardAgent from "../../components/PropertyDetailsAgent";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { PropertyDetails } from "../../types/propertyDetail";
 import { Owner } from "../../types/propertyDetail";
 
-
-const AgentVerificationDetailsPage = () => {
+function AgentVerificationDetailsContent() {
   const [property, setProperty] = useState<PropertyDetails | null>(null);
   const [owner, setOwner] = useState<Owner | null>(null);
   const [loading, setLoading] = useState(true);
@@ -23,7 +22,7 @@ const AgentVerificationDetailsPage = () => {
         const agentId = searchParams.get("agentId") || "";
 
         const response = await axios.post(
-          `http://localhost:3001/api/v1/admin/agentverifiedProperty-details/?id=${id}&ownerId=${ownerId}&listingType=${listingType}&listingId=${listingId}&agentId=${agentId}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/admin/agentverifiedProperty-details/?id=${id}&ownerId=${ownerId}&listingType=${listingType}&listingId=${listingId}&agentId=${agentId}`,
           {},
           {
             headers: {
@@ -34,8 +33,8 @@ const AgentVerificationDetailsPage = () => {
         );
         if (response.data.details && response.data.details.length > 0) {
           setProperty(response.data.details[0]);
-          localStorage.setItem("id" , id || "");
-          localStorage.setItem("agentId" , agentId || "");
+          localStorage.setItem("id", id || "");
+          localStorage.setItem("agentId", agentId || "");
         }
         if (response.data.owner) {
           setOwner(response.data.owner);
@@ -45,13 +44,21 @@ const AgentVerificationDetailsPage = () => {
       }
     }
     fetchDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   if (loading) return <div className="p-10 text-center">Loading...</div>;
   if (!property) return <div className="p-10 text-center text-red-500">No details found.</div>;
 
-  // Pass property and owner to the card
-  return <PropertyDetailsCardAgent property={property} owner={owner ?? undefined} />;
-};
+  return (
+    <PropertyDetailsCardAgent property={property} owner={owner ?? undefined} />
+  );
+}
 
-export default AgentVerificationDetailsPage;
+const AgentDetailsPage = () => (
+  <Suspense fallback={<div className="p-10 text-center">Loading...</div>}>
+    <AgentVerificationDetailsContent />
+  </Suspense>
+);
+
+export default AgentDetailsPage;

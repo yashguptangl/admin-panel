@@ -54,6 +54,7 @@ model Agent {
   personverifiedName   String
   walletRs             Int                   @default(0)
   role                 String                @default("agent")
+  earnings             Int                   @default(0)
   Agentprogress        Agentprogress?
   VerificationRequests VerificationRequest[]
 }
@@ -107,6 +108,7 @@ model FlatInfo {
   verifiedByAdminOrAgent DateTime
   totalFloor             String
   postPropertyByAdmin    Boolean  @default(false)
+  createdAt              DateTime @default(now())
   owner                  Owner    @relation(fields: [ownerId], references: [id])
 }
 
@@ -151,6 +153,7 @@ model PgInfo {
   verifiedByAdminOrAgent DateTime
   totalFloor             String
   postPropertyByAdmin    Boolean  @default(false)
+  createdAt              DateTime @default(now())
   owner                  Owner    @relation(fields: [ownerId], references: [id])
 }
 
@@ -193,6 +196,7 @@ model RoomInfo {
   verifiedByAdminOrAgent DateTime
   totalFloor             String
   postPropertyByAdmin    Boolean  @default(false)
+  createdAt              DateTime @default(now())
   owner                  Owner    @relation(fields: [ownerId], references: [id])
 }
 
@@ -232,6 +236,7 @@ model VerificationRequest {
   city             String
   townSector       String
   location         String
+  address          String
   agent            Agent?     @relation(fields: [agentId], references: [agentId])
   owner            Owner      @relation(fields: [ownerId], references: [id])
 
@@ -293,7 +298,27 @@ model hourlyInfo {
   verifiedByAdminOrAgent DateTime
   postPropertyByAdmin    Boolean  @default(false)
   listingShowNo          String
+  createdAt              DateTime @default(now())
+  luxury                 String
   Owner                  Owner    @relation(fields: [ownerId], references: [id])
+}
+
+model Payment {
+  id            String  @id
+  orderId       String  @unique
+  listingId     String
+  listingType   String
+  email         String
+  phone         String
+  amount        Float
+  status        String
+  city          String?
+  townSector    String?
+  address       String?
+  location      String?
+  listingShowNo String?
+  leadCount     Int?
+  leadPrice     Float?
 }
 
 enum Role {
@@ -311,4 +336,10 @@ enum StatusType {
   PAY
   CANCELLED_PAYMENT
   DONE
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
 }

@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Header from "../components/header";
-import Footer from "../components/footer";
 import Sidebar from "../components/sidebar";
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
@@ -30,7 +29,7 @@ export default function NotVerifiedRoom() {
     useEffect(() => {
         const fetchNotVerifiedRooms = async () => {
             try {
-                const response = await axios.get("http://localhost:3001/api/v1/admin/not-verified-room", {
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/admin/not-verified-room`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -119,7 +118,7 @@ export default function NotVerifiedRoom() {
                                                     <button
                                                         className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
                                                         onClick={() => {
-                                                            router.push(`/not-verified-room/${room.id}`);
+                                                            router.push(`/not-verified-room/id?id=${room.id}`);
                                                         }}
                                                     >
                                                         Open
@@ -133,7 +132,6 @@ export default function NotVerifiedRoom() {
                     </div>
                 </div>
             </div>
-            <Footer />
         </>
     )
 }

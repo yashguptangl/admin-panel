@@ -1,10 +1,11 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState , Suspense } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "../../components/sidebar";
 import Header from "../../components/header";
-import Footer from "../../components/footer";
+import { useSearchParams } from "next/navigation";
 import axios from "axios";
+import Image from "next/image";
 interface AgentData {
     agent: {
         id: number;
@@ -28,48 +29,23 @@ interface AgentData {
         aadharFront: string;
         aadharBack: string;
         pancard: string;
-        passbook: string;
+        passbook: string; // Optional field for passbook
     };
 }
-
-interface AgentDetailsProps {
-    params: { agentId: string };
-}
-
-export default function AgentDetails({ params }: AgentDetailsProps) {
-    const { agentId } = params;
+function AgentDetailsContent() {
     const router = useRouter();
     const [agent, setAgent] = useState<AgentData["agent"] | null>(null);
     const [kycDocuments, setKycDocuments] = useState<AgentData["kycDocuments"] | null>(null);
-    const [decoded , setDecoded] = useState<{ username: string } | null>(null);
+    const searchParams = useSearchParams();
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            try {
-                const payload = token.split('.')[1];
-                if (payload) {
-                    const jsonPayload = atob(payload);
-                    const decoded = JSON.parse(jsonPayload);
-                    setDecoded(decoded);
-                    console.log("Decoded token:", decoded);
-                } else {
-                    console.error("Token payload is undefined.");
-                }
-            } catch (err) {
-                console.error("Failed to decode token:", err);
-            }
-        }
-        console.log("Decoded token:", decoded);
-    }, []);
-
-
-    useEffect(() => {
+        
+        const agentId = searchParams.get("agentId");
         if (!agentId) return;
 
         async function fetchAgentDetails() {
             try {
-                const res = await fetch(`http://localhost:3001/api/v1/admin/agents/details/?id=${agentId}`, {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/admin/agents/details/?id=${agentId}`, {
                     headers: {
                         token: localStorage.getItem("token") || "",
                         "Content-Type": "application/json",
@@ -89,9 +65,7 @@ export default function AgentDetails({ params }: AgentDetailsProps) {
         }
 
         fetchAgentDetails();
-    }, [agentId]);
-
-
+    }, []);
 
     if (!agent || !kycDocuments) {
         return (
@@ -105,23 +79,22 @@ export default function AgentDetails({ params }: AgentDetailsProps) {
                         </div>
                     </main>
                 </div>
-                <Footer />
             </div>
         );
     }
-    async function onClick(event: React.MouseEvent<HTMLButtonElement>){
+    async function onClick(){
         try {
-            const response = await fetch(`http://localhost:3001/api/v1/admin/agents/verify/?id=${agentId}&personverified=${decoded?.username}`, {
+            const agentId = searchParams.get("agentId");
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/admin/agents/unverify/?id=${agentId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                     token: localStorage.getItem("token") || "",
                 },
-
             });
             if(response.status === 200){
-                alert("Agent verified successfully");
-                router.push("/agents-notverified");
+                alert("Agent Unverified successfully");
+                router.push("/agents-verified");
             }
         }catch (error) {
             console.log("Error verifying agent:", error);
@@ -169,7 +142,9 @@ export default function AgentDetails({ params }: AgentDetailsProps) {
                             {/* Agent Summary Card */}
                             <div className="bg-white rounded-lg shadow-sm p-6 col-span-1">
                                 <div className="flex flex-col items-center">
-                                    <img
+                                    <Image
+                                        height={128}
+                                        width={128}
                                         src={kycDocuments.agentImage}
                                         alt="Agent"
                                         className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md mb-4"
@@ -218,7 +193,7 @@ export default function AgentDetails({ params }: AgentDetailsProps) {
                                             { label: "Aadhar Front", key: "aadharFront", url: kycDocuments.aadharFront },
                                             { label: "Aadhar Back", key: "aadharBack", url: kycDocuments.aadharBack },
                                             { label: "PAN Card", key: "pancard", url: kycDocuments.pancard },
-                                            { label: "Passbook", key: "passbook", url: kycDocuments.passbook },
+                                            { label: "Passbook", key: "passbook", url: kycDocuments.passbook || "" },
                                         ].map((item) => (
                                             <div key={item.key} className="text-center">
                                                 <label className="block text-sm font-medium text-gray-900 mb-2">
@@ -230,7 +205,7 @@ export default function AgentDetails({ params }: AgentDetailsProps) {
                                                     rel="noopener noreferrer"
                                                     className="block"
                                                 >
-                                                    <img
+                                                    <Image
                                                         src={item.url}
                                                         alt={item.label}
                                                         className="w-full h-32 object-contain rounded border border-gray-200 bg-gray-100 p-1 hover:shadow-md transition-shadow"
@@ -247,30 +222,31 @@ export default function AgentDetails({ params }: AgentDetailsProps) {
                                             </div>
                                         ))}
                                     </div>
-                                </div>
+                            </div>
                         </div>
 
                         {/* Verification Actions */}
                         <div className="flex justify-end gap-4 mt-8">
                                 <button
                                     type="submit"
-                                    onClick={() => router.push("/agents-notverified")}
+                                    onClick={onClick}
                                     className="px-6 py-2 bg-red-100 text-red-700 rounded-md border border-red-200 hover:bg-red-200 transition-colors"
                                 >
                                     Reject Verification
                                 </button>
-                                <button
-                                    type="submit"
-                                    onClick={(event) => onClick(event)}
-                                    className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors shadow-sm"
-                                >
-                                    Approve Verification
-                                </button>
+            
                         </div>
                     </div>
                 </main>
             </div>
-            <Footer />
+            
         </div>
     );
 }
+
+const AgentDetailsPage = () => (
+    <Suspense fallback={<div className="p-10 text-center">Loading...</div>}>
+        <AgentDetailsContent />
+    </Suspense>
+);
+export default AgentDetailsPage;

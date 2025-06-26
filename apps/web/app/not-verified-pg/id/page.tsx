@@ -1,17 +1,15 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , Suspense } from "react";
 import Header from "../../components/header";
-import Footer from "../../components/footer";
 import Sidebar from "../../components/sidebar";
 import axios from "axios";
 import { PgData } from "../../types/data";
+import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 
-interface PgId {
-  params: { id: number };
-}
-
-export default function FullNotVerifiedDetailsPg({ params }: PgId) {
-  const { id } = params;
+function FullNotVerifiedDetailsPg() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
   const [data, setData] = useState<PgData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -27,7 +25,7 @@ export default function FullNotVerifiedDetailsPg({ params }: PgId) {
     async function fetchPgDetails() {
       try {
         const response = await axios.get(
-          `http://localhost:3001/api/v1/admin/not-verified-pg-full-details?id=${id}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/admin/not-verified-pg-full-details?id=${id}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -42,6 +40,7 @@ export default function FullNotVerifiedDetailsPg({ params }: PgId) {
         }
       } catch (err) {
         setError("Error fetching PG details.");
+        console.log("Error : ", err)
       } finally {
         setLoading(false);
       }
@@ -343,7 +342,7 @@ export default function FullNotVerifiedDetailsPg({ params }: PgId) {
                     rel="noopener noreferrer"
                     className="block w-full max-w-md mx-auto"
                   >
-                    <img
+                    <Image
                       src={imageArray[activeImageIndex]?.url || "/placeholder.png"}
                       alt={imageArray[activeImageIndex]?.label || "Property Image"}
                       className="w-full h-56 object-cover rounded-lg border"
@@ -363,7 +362,7 @@ export default function FullNotVerifiedDetailsPg({ params }: PgId) {
                         }`}
                         type="button"
                       >
-                        <img
+                        <Image
                           src={image?.url || "/placeholder.png"}
                           alt={image?.label || "Property Image"}
                           className="object-cover w-full h-full"
@@ -377,7 +376,14 @@ export default function FullNotVerifiedDetailsPg({ params }: PgId) {
           </div>
         </main>
       </div>
-      <Footer />
     </>
   );
 }
+
+const NotVerifiedPgDetailsPage = () => (
+  <Suspense fallback={<div className="p-10 text-center">Loading...</div>}>
+    <FullNotVerifiedDetailsPg />
+  </Suspense>
+);
+
+export default NotVerifiedPgDetailsPage;

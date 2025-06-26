@@ -1,6 +1,5 @@
 "use client";
 import Header from "../components/header";
-import Footer from "../components/footer";
 import Sidebar from "../components/sidebar";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -24,7 +23,7 @@ export default function AdminAgentTable() {
   useEffect(() => {
     const fetchNotVerifiedAgents = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/api/v1/admin/agents-notverified", {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/admin/agents-notverified`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -80,7 +79,7 @@ export default function AdminAgentTable() {
                   </td>
                   </tr>
                 ) : (
-                  notVerifiedAgents.map((agent, index) => (
+                  notVerifiedAgents.map((agent) => (
                   <tr key={agent.id} className="hover:bg-gray-100">
                     <td className="border p-2">{agent.id}</td>
                     <td className="border p-2">{agent.username}</td>
@@ -97,7 +96,7 @@ export default function AdminAgentTable() {
                     <button
                       className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
                       onClick={() => {
-                        router.push(`/agents-notverified/${agent.agentId}`);
+                        router.push(`/agents-notverified/agentId?agentId=${agent.agentId}`);
                       }}
                     >
                       Open
@@ -111,7 +110,6 @@ export default function AdminAgentTable() {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 }

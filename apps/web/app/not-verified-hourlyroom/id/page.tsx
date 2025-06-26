@@ -1,18 +1,19 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , Suspense } from "react";
 import Header from "../../components/header";
-import Footer from "../../components/footer";
 import Sidebar from "../../components/sidebar";
 import axios from "axios";
-import { RoomData } from "../../types/data";
+import { useSearchParams } from "next/navigation";
+import type { HourlyRoomData } from "../../types/data";
+import Image from "next/image";
 
-interface RoomId {
+interface HourlyRoomId {
   params: { id: number };
 }
-
-export default function FullNotVerifiedDetailsRoom({ params }: RoomId) {
-  const { id } = params;
-  const [data, setData] = useState<RoomData | null>(null);
+function FullNotVerifiedDetailsHourlyRoom() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+  const [data, setData] = useState<HourlyRoomData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -24,10 +25,10 @@ export default function FullNotVerifiedDetailsRoom({ params }: RoomId) {
       return;
     }
 
-    async function fetchRoomDetails() {
+    async function fetchHourlyRoomDetails() {
       try {
         const response = await axios.get(
-          `http://localhost:3001/api/v1/admin/not-verified-room-full-details?id=${id}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/admin/not-verified-hourlyroom-full-details?id=${id}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -35,19 +36,20 @@ export default function FullNotVerifiedDetailsRoom({ params }: RoomId) {
             },
           }
         );
-        if (response.data && response.data.room) {
+        if (response.data) {
           setData(response.data);
         } else {
           setError("No data found for the given ID.");
         }
       } catch (err) {
-        setError("Error fetching room details.");
+        setError("Error fetching hourly room details.");
+        console.log("Error : ", err)
       } finally {
         setLoading(false);
       }
     }
 
-    fetchRoomDetails();
+    fetchHourlyRoomDetails();
   }, [id]);
 
   if (loading) {
@@ -74,31 +76,32 @@ export default function FullNotVerifiedDetailsRoom({ params }: RoomId) {
     );
   }
 
-  const { room, owner, images } = data;
+  const { hourlyRoom, images } = data as HourlyRoomData;
 
   const formatPrice = (price: string) => {
     return parseInt(price).toLocaleString("en-IN");
   };
 
-  const renderAmenities = (amenities: string[]) => (
-    <div className="flex flex-wrap gap-2">
-      {amenities.map((item, index) => (
-        <span
-          key={index}
-          className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded"
-        >
-          {item}
-        </span>
-      ))}
-    </div>
-  );
+  const renderAmenities = (amenities: string[]) => {
+    return (
+      <div className="flex flex-wrap gap-2">
+        {amenities.map((item, index) => (
+          <span
+            key={index}
+            className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded"
+          >
+            {item}
+          </span>
+        ))}
+      </div>
+    );
+  };
 
   // Convert images object to array for easier mapping
   const imageArray = [
     { label: "Front View", url: images.front },
     { label: "Inside View", url: images.inside },
     { label: "Lobby", url: images.lobby },
-    { label: "Kitchen", url: images.kitchen },
     { label: "Toilet", url: images.toilet },
     { label: "Bathroom", url: images.bathroom },
   ];
@@ -112,16 +115,16 @@ export default function FullNotVerifiedDetailsRoom({ params }: RoomId) {
           <div className="max-w-7xl mx-auto">
             <div className="flex justify-between items-center mb-6">
               <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
-                {room.Type} in {room.location}, {room.city} {room.townSector}
+                {hourlyRoom.Type} - {hourlyRoom.palaceName} in {hourlyRoom.location}, {hourlyRoom.city} {hourlyRoom.townSector}
               </h1>
               <span
                 className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  room.isVerified
+                  hourlyRoom.isVerified
                     ? "bg-green-100 text-green-800"
                     : "bg-yellow-100 text-yellow-800"
                 }`}
               >
-                {room.isVerified ? "Verified" : "Not Verified"}
+                {hourlyRoom.isVerified ? "Verified" : "Not Verified"}
               </span>
             </div>
 
@@ -137,19 +140,19 @@ export default function FullNotVerifiedDetailsRoom({ params }: RoomId) {
                     <div className="border-r border-gray-200 pr-4">
                       <p className="text-sm text-gray-800">Price Range</p>
                       <p className="text-lg font-semibold">
-                        ₹{formatPrice(room.MinPrice)} - ₹{formatPrice(room.MaxPrice)}
-                      </p>
-                    </div>
-                    <div className="border-r border-gray-200 pr-4">
-                      <p className="text-sm text-gray-800">Security Deposit</p>
-                      <p className="text-lg font-semibold">
-                        ₹{formatPrice(room.security)}
+                        ₹{formatPrice(hourlyRoom.MinPrice)} - ₹{formatPrice(hourlyRoom.MaxPrice)}
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-800">Maintenance</p>
+                      <p className="text-sm text-gray-800">Bed Count</p>
                       <p className="text-lg font-semibold">
-                        ₹{formatPrice(room.maintenance)}/month
+                        {hourlyRoom.BedCount}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-800">Total Rooms</p>
+                      <p className="text-lg font-semibold">
+                        {hourlyRoom.totalRoom}
                       </p>
                     </div>
                   </div>
@@ -162,52 +165,44 @@ export default function FullNotVerifiedDetailsRoom({ params }: RoomId) {
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <p className="text-sm text-gray-800">Contact</p>
-                      <p className="font-medium">{room.listingShowNo}</p>
+                      <p className="text-sm text-gray-800">Palace Name</p>
+                      <p className="font-medium">{hourlyRoom.palaceName}</p>
+                    </div>  
+                    <div>
+                      <p className="text-sm text-gray-800">Manager</p>
+                      <p className="font-medium">{hourlyRoom.manager}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-800">BHK</p>
-                      <p className="font-medium">{room.BHK}</p>
+                      <p className="text-sm text-gray-800">Contact</p>
+                      <p className="font-medium">{hourlyRoom.listingShowNo}</p>
                     </div>
                     <div>
                       <p className="text-sm text-gray-800">Furnishing</p>
-                      <p className="font-medium">{room.furnishingType}</p>
+                      <p className="font-medium">{hourlyRoom.furnishingType}</p>
                     </div>
                     <div>
                       <p className="text-sm text-gray-800">Accommodation Type</p>
-                      <p className="font-medium">{room.accomoType}</p>
+                      <p className="font-medium">{hourlyRoom.accomoType}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-800">Offer</p>
-                      <p className="font-medium">{room.Offer}</p>
+                      <p className="text-sm text-gray-800">AC Type</p>
+                      <p className="font-medium">{hourlyRoom.acType}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-800">No. of Guests</p>
+                      <p className="font-medium">{hourlyRoom.noofGuests}</p>
                     </div>
                     <div>
                       <p className="text-sm text-gray-800">Total Floors</p>
-                      <p className="font-medium">{room.totalFloor}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-800">Total Rooms</p>
-                      <p className="font-medium">{room.totalRoom}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-800">Water Supply in hr</p>
-                      <p className="font-medium">{room.waterSupply}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-800">Power Backup in hr</p>
-                      <p className="font-medium">{room.powerBackup}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-800">Notice Period in m</p>
-                      <p className="font-medium">{room.noticePeriod}</p>
+                      <p className="font-medium">{hourlyRoom.totalFloor}</p>
                     </div>
                     <div>
                       <p className="text-sm text-gray-800">Room Type</p>
-                      <p className="font-medium">{room.roomType}</p>
+                      <p className="font-medium">{hourlyRoom.roomType}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-800">Room Available</p>
-                      <p className="font-medium">{room.RoomAvailable}</p>
+                      <p className="text-sm text-gray-800">Food Available</p>
+                      <p className="font-medium">{hourlyRoom.foodAvailable ? "Yes" : "No"}</p>
                     </div>
                   </div>
                 </div>
@@ -220,26 +215,26 @@ export default function FullNotVerifiedDetailsRoom({ params }: RoomId) {
                   <div className="space-y-3">
                     <div>
                       <p className="text-sm text-gray-800">Full Address</p>
-                      <p className="font-medium">{room.adress}</p>
+                      <p className="font-medium">{hourlyRoom.adress}</p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <p className="text-sm text-gray-800">Location</p>
-                        <p className="font-medium">{room.location}</p>
+                        <p className="font-medium">{hourlyRoom.location}</p>
                       </div>
                       <div>
                         <p className="text-sm text-gray-800">Landmark</p>
-                        <p className="font-medium">{room.landmark}</p>
+                        <p className="font-medium">{hourlyRoom.landmark}</p>
                       </div>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <p className="text-sm text-gray-800">City</p>
-                        <p className="font-medium">{room.city}</p>
+                        <p className="font-medium">{hourlyRoom.city}</p>
                       </div>
                       <div>
                         <p className="text-sm text-gray-800">Town/Sector</p>
-                        <p className="font-medium">{room.townSector}</p>
+                        <p className="font-medium">{hourlyRoom.townSector}</p>
                       </div>
                     </div>
                   </div>
@@ -256,15 +251,15 @@ export default function FullNotVerifiedDetailsRoom({ params }: RoomId) {
                   <div className="space-y-3">
                     <div>
                       <p className="text-sm text-gray-800">Name</p>
-                      <p className="font-medium">{owner.username}</p>
+                      <p className="font-medium">{data.owner.username}</p>
                     </div>
                     <div>
                       <p className="text-sm text-gray-800">Email</p>
-                      <p className="font-medium">{owner.email}</p>
+                      <p className="font-medium">{data.owner.email}</p>
                     </div>
                     <div>
                       <p className="text-sm text-gray-800">Mobile</p>
-                      <p className="font-medium">{owner.mobile}</p>
+                      <p className="font-medium">{data.owner.mobile}</p>
                     </div>
                   </div>
                 </div>
@@ -279,19 +274,19 @@ export default function FullNotVerifiedDetailsRoom({ params }: RoomId) {
                       <h3 className="font-medium text-gray-700 mb-2">
                         Inside Room
                       </h3>
-                      {renderAmenities(room.roomInside)}
+                      {renderAmenities(hourlyRoom.roomInside)}
                     </div>
                     <div>
                       <h3 className="font-medium text-gray-700 mb-2">
                         Outside Room
                       </h3>
-                      {renderAmenities(room.roomOutside)}
+                      {renderAmenities(hourlyRoom.roomOutside)}
                     </div>
                     <div>
                       <h3 className="font-medium text-gray-700 mb-2">
                         Parking
                       </h3>
-                      {renderAmenities(room.parking)}
+                      {renderAmenities(hourlyRoom.parking)}
                     </div>
                   </div>
                 </div>
@@ -305,16 +300,12 @@ export default function FullNotVerifiedDetailsRoom({ params }: RoomId) {
                     <div>
                       <p className="text-sm text-gray-800">Preferred Tenants</p>
                       <p className="font-medium">
-                        {room.preferTenants.join(", ")}
+                        {hourlyRoom.preferTenants.join(", ")}
                       </p>
                     </div>
                     <div>
                       <p className="text-sm text-gray-800">Gender Preference</p>
-                      <p className="font-medium">{room.genderPrefer}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-800">Care Taker</p>
-                      <p className="font-medium">{room.careTaker}</p>
+                      <p className="font-medium">{hourlyRoom.genderPrefer}</p>
                     </div>
                   </div>
                 </div>
@@ -335,7 +326,7 @@ export default function FullNotVerifiedDetailsRoom({ params }: RoomId) {
                     rel="noopener noreferrer"
                     className="block w-full max-w-md mx-auto"
                   >
-                    <img
+                    <Image
                       src={imageArray[activeImageIndex]?.url || "/placeholder.png"}
                       alt={imageArray[activeImageIndex]?.label || "Property Image"}
                       className="w-full h-56 object-cover rounded-lg border"
@@ -355,7 +346,7 @@ export default function FullNotVerifiedDetailsRoom({ params }: RoomId) {
                         }`}
                         type="button"
                       >
-                        <img
+                        <Image
                           src={image?.url || "/placeholder.png"}
                           alt={image?.label || "Property Image"}
                           className="object-cover w-full h-full"
@@ -369,7 +360,15 @@ export default function FullNotVerifiedDetailsRoom({ params }: RoomId) {
           </div>
         </main>
       </div>
-      <Footer />
     </>
   );
 }
+
+
+const NotVerifiedHourlyRoomDetailsPage = () => (
+  <Suspense fallback={<div className="p-10 text-center">Loading...</div>}>
+    <FullNotVerifiedDetailsHourlyRoom />
+  </Suspense>
+);
+
+export default NotVerifiedHourlyRoomDetailsPage;
