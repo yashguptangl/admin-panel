@@ -31,7 +31,7 @@ export default function LoginSignup() {
   const onSubmit = async (data: LoginFormValues) => {
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/v1/admin/login`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/admin/login`,
         data,
         { headers: { "Content-Type": "application/json" } }
       );
