@@ -9,6 +9,7 @@ export default interface VerifiedRequestItem {
     listingId: number;
     imagesUploaded: boolean;
     listingShowNo: string;
+    verifiedByAdminOrAgent: string;
     updatedAt: string;
     status: string;
     city: string;

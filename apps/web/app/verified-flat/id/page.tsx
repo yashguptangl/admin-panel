@@ -1,16 +1,16 @@
 "use client";
-import React, { useEffect, useState , Suspense } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import Header from "../../components/header";
 import Sidebar from "../../components/sidebar";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
-import type { HourlyRoomData } from "../../types/data";
+import FlatData from "../../types/data"; 
 import Image from "next/image";
 
-function FullNotVerifiedDetailsHourlyRoom() {
+function FullVerifiedDetailsFlat() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
-  const [data, setData] = useState<HourlyRoomData | null>(null);
+  const [data, setData] = useState<FlatData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -22,10 +22,10 @@ function FullNotVerifiedDetailsHourlyRoom() {
       return;
     }
 
-    async function fetchHourlyRoomDetails() {
+    async function fetchFlatDetails() {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/admin/not-verified-hourlyroom-full-details?id=${id}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/admin/verified-flat-full-details/?id=${id}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -39,14 +39,19 @@ function FullNotVerifiedDetailsHourlyRoom() {
           setError("No data found for the given ID.");
         }
       } catch (err) {
-        setError("Error fetching hourly room details.");
-        console.log("Error : ", err)
+        if (axios.isAxiosError(err) && err.response?.status === 403) {
+          setError(
+            "You are not authorized to view this page. Please log in as an admin."
+          );
+        } else {
+          setError("Error fetching flat details.");
+        }
       } finally {
         setLoading(false);
       }
     }
 
-    fetchHourlyRoomDetails();
+    fetchFlatDetails();
   }, [id]);
 
   if (loading) {
@@ -73,7 +78,7 @@ function FullNotVerifiedDetailsHourlyRoom() {
     );
   }
 
-  const { hourlyRoom, images } = data as HourlyRoomData;
+  const { flat, images } = data;
 
   const formatPrice = (price: string) => {
     return parseInt(price).toLocaleString("en-IN");
@@ -99,6 +104,7 @@ function FullNotVerifiedDetailsHourlyRoom() {
     { label: "Front View", url: images.front },
     { label: "Inside View", url: images.inside },
     { label: "Lobby", url: images.lobby },
+    { label: "Kitchen", url: images.kitchen },
     { label: "Toilet", url: images.toilet },
     { label: "Bathroom", url: images.bathroom },
   ];
@@ -112,18 +118,20 @@ function FullNotVerifiedDetailsHourlyRoom() {
           <div className="max-w-7xl mx-auto">
             <div className="flex justify-between items-center mb-6">
               <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
-                {hourlyRoom.Type} - {hourlyRoom.palaceName} in {hourlyRoom.location}, {hourlyRoom.city} {hourlyRoom.townSector}
+                {flat.Type} in {flat.location}, {flat.city} {flat.townSector}
               </h1>
               <span
                 className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  hourlyRoom.isVerified
+                  flat.isVerified
                     ? "bg-green-100 text-green-800"
                     : "bg-yellow-100 text-yellow-800"
                 }`}
               >
-                {hourlyRoom.isVerified ? "Verified" : "Not Verified"}
+                {flat.isVerified ? "Verified" : "Not Verified"}
               </span>
             </div>
+
+            
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Main Details */}
@@ -137,69 +145,73 @@ function FullNotVerifiedDetailsHourlyRoom() {
                     <div className="border-r border-gray-200 pr-4">
                       <p className="text-sm text-gray-800">Price Range</p>
                       <p className="text-lg font-semibold">
-                        ₹{formatPrice(hourlyRoom.MinPrice)} - ₹{formatPrice(hourlyRoom.MaxPrice)}
+                        ₹{formatPrice(flat.MinPrice)} - ₹{formatPrice(flat.MaxPrice)}
+                      </p>
+                    </div>
+                    <div className="border-r border-gray-200 pr-4">
+                      <p className="text-sm text-gray-800">Security Deposit</p>
+                      <p className="text-lg font-semibold">
+                        ₹{formatPrice(flat.security)}
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-800">Bed Count</p>
+                      <p className="text-sm text-gray-800">Maintenance</p>
                       <p className="text-lg font-semibold">
-                        {hourlyRoom.BedCount}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-800">Total Rooms</p>
-                      <p className="text-lg font-semibold">
-                        {hourlyRoom.totalRoom}
+                        ₹{formatPrice(flat.maintenance)}/month
                       </p>
                     </div>
                   </div>
                 </div>
 
-                {/* Room Details */}
+                {/* Property Details */}
                 <div className="bg-white rounded-xl shadow-sm p-6">
                   <h2 className="text-xl font-semibold mb-4 text-gray-800">
-                    Room Details
+                    Property Details
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <p className="text-sm text-gray-800">Palace Name</p>
-                      <p className="font-medium">{hourlyRoom.palaceName}</p>
-                    </div>  
-                    <div>
-                      <p className="text-sm text-gray-800">Manager</p>
-                      <p className="font-medium">{hourlyRoom.manager}</p>
+                      <p className="text-sm text-gray-800">Contact</p>
+                      <p className="font-medium">{flat.listingShowNo}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-800">Contact</p>
-                      <p className="font-medium">{hourlyRoom.listingShowNo}</p>
+                      <p className="text-sm text-gray-800">BHK</p>
+                      <p className="font-medium">{flat.BHK}</p>
                     </div>
                     <div>
                       <p className="text-sm text-gray-800">Furnishing</p>
-                      <p className="font-medium">{hourlyRoom.furnishingType}</p>
+                      <p className="font-medium">{flat.furnishingType}</p>
                     </div>
                     <div>
                       <p className="text-sm text-gray-800">Accommodation Type</p>
-                      <p className="font-medium">{hourlyRoom.accomoType}</p>
+                      <p className="font-medium">{flat.accomoType}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-800">AC Type</p>
-                      <p className="font-medium">{hourlyRoom.acType}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-800">No. of Guests</p>
-                      <p className="font-medium">{hourlyRoom.noofGuests}</p>
+                      <p className="text-sm text-gray-800">Offer</p>
+                      <p className="font-medium">{flat.Offer}</p>
                     </div>
                     <div>
                       <p className="text-sm text-gray-800">Total Floors</p>
-                      <p className="font-medium">{hourlyRoom.totalFloor}</p>
+                      <p className="font-medium">{flat.totalFloor}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-800">Room Type</p>
-                      <p className="font-medium">{hourlyRoom.roomType}</p>
+                      <p className="text-sm text-gray-800">Total Flats</p>
+                      <p className="font-medium">{flat.totalFlat}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-800">Food Available</p>
-                      <p className="font-medium">{hourlyRoom.foodAvailable ? "Yes" : "No"}</p>
+                      <p className="text-sm text-gray-800">Water Supply in hr</p>
+                      <p className="font-medium">{flat.waterSupply}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-800">Power Backup in hr</p>
+                      <p className="font-medium">{flat.powerBackup}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-800">Notice Period in m</p>
+                      <p className="font-medium">{flat.noticePeriod}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-800">Flat Type</p>
+                      <p className="font-medium">{flat.flatType}</p>
                     </div>
                   </div>
                 </div>
@@ -212,31 +224,34 @@ function FullNotVerifiedDetailsHourlyRoom() {
                   <div className="space-y-3">
                     <div>
                       <p className="text-sm text-gray-800">Full Address</p>
-                      <p className="font-medium">{hourlyRoom.adress}</p>
+                      <p className="font-medium">{flat.Adress}</p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <p className="text-sm text-gray-800">Location</p>
-                        <p className="font-medium">{hourlyRoom.location}</p>
+                        <p className="font-medium">{flat.location}</p>
                       </div>
                       <div>
                         <p className="text-sm text-gray-800">Landmark</p>
-                        <p className="font-medium">{hourlyRoom.landmark}</p>
+                        <p className="font-medium">{flat.landmark}</p>
                       </div>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <p className="text-sm text-gray-800">City</p>
-                        <p className="font-medium">{hourlyRoom.city}</p>
+                        <p className="font-medium">{flat.city}</p>
                       </div>
                       <div>
                         <p className="text-sm text-gray-800">Town/Sector</p>
-                        <p className="font-medium">{hourlyRoom.townSector}</p>
+                        <p className="font-medium">{flat.townSector}</p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+              
+              
+              
 
               {/* Sidebar */}
               <div className="space-y-6">
@@ -269,21 +284,21 @@ function FullNotVerifiedDetailsHourlyRoom() {
                   <div className="space-y-4">
                     <div>
                       <h3 className="font-medium text-gray-700 mb-2">
-                        Inside Room
+                        Inside Flat
                       </h3>
-                      {renderAmenities(hourlyRoom.roomInside)}
+                      {renderAmenities(flat.flatInside)}
                     </div>
                     <div>
                       <h3 className="font-medium text-gray-700 mb-2">
-                        Outside Room
+                        Outside Flat
                       </h3>
-                      {renderAmenities(hourlyRoom.roomOutside)}
+                      {renderAmenities(flat.flatOutside)}
                     </div>
                     <div>
                       <h3 className="font-medium text-gray-700 mb-2">
                         Parking
                       </h3>
-                      {renderAmenities(hourlyRoom.parking)}
+                      {renderAmenities(flat.parking)}
                     </div>
                   </div>
                 </div>
@@ -297,16 +312,32 @@ function FullNotVerifiedDetailsHourlyRoom() {
                     <div>
                       <p className="text-sm text-gray-800">Preferred Tenants</p>
                       <p className="font-medium">
-                        {hourlyRoom.preferTenants.join(", ")}
+                        {flat.preferTenants.join(", ")}
                       </p>
                     </div>
                     <div>
                       <p className="text-sm text-gray-800">Gender Preference</p>
-                      <p className="font-medium">{hourlyRoom.genderPrefer}</p>
+                      <p className="font-medium">{flat.genderPrefer}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-800">Pets Allowed</p>
+                      <p className="font-medium">
+                        {flat.petsAllowed ? "Yes" : "No"}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-800">Care Taker</p>
+                      <p className="font-medium">{flat.careTaker}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-800">Verified on </p>
+                      <p className="font-medium">{flat.verifiedByAdminOrAgent}</p>
                     </div>
                   </div>
                 </div>
+                
               </div>
+              
             </div>
             {/* Image Gallery Section */}
             <div className="bg-white rounded-xl shadow-sm p-6 mb-6 mt-3">
@@ -327,8 +358,8 @@ function FullNotVerifiedDetailsHourlyRoom() {
                       src={imageArray[activeImageIndex]?.url || "/placeholder.png"}
                       alt={imageArray[activeImageIndex]?.label || "Property Image"}
                       className="w-full h-56 object-cover rounded-lg border"
-                      width={400}
                       height={224}
+                      width={400}
                     />
                     <div className="mt-2 text-center text-sm text-gray-700">
                       {imageArray[activeImageIndex]?.label || "Property Image"}
@@ -349,15 +380,15 @@ function FullNotVerifiedDetailsHourlyRoom() {
                           src={image?.url || "/placeholder.png"}
                           alt={image?.label || "Property Image"}
                           className="object-cover w-full h-full"
-                          width={64}
                           height={64}
+                          width={64}
                         />
                       </button>
                     ))}
                   </div>
-                </div>
+                </div>   
               </div>
-               <div className="flex justify-end">
+              <div className="flex justify-end">
                 <button
                   className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
                   onClick={() => window.history.back()}
@@ -373,11 +404,10 @@ function FullNotVerifiedDetailsHourlyRoom() {
   );
 }
 
-
-const NotVerifiedHourlyRoomDetailsPage = () => (
+const VerifiedFlatDetailsPage = () => (
   <Suspense fallback={<div className="p-10 text-center">Loading...</div>}>
-    <FullNotVerifiedDetailsHourlyRoom />
+    <FullVerifiedDetailsFlat />
   </Suspense>
 );
 
-export default NotVerifiedHourlyRoomDetailsPage;
+export default VerifiedFlatDetailsPage;

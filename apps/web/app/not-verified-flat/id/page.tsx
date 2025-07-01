@@ -355,6 +355,8 @@ function FullNotVerifiedDetailsFlat() {
                       src={imageArray[activeImageIndex]?.url || "/placeholder.png"}
                       alt={imageArray[activeImageIndex]?.label || "Property Image"}
                       className="w-full h-56 object-cover rounded-lg border"
+                      width={400} // Add this
+                      height={224} // Add this
                     />
                     <div className="mt-2 text-center text-sm text-gray-700">
                       {imageArray[activeImageIndex]?.label || "Property Image"}
@@ -374,12 +376,22 @@ function FullNotVerifiedDetailsFlat() {
                         <Image
                           src={image?.url || "/placeholder.png"}
                           alt={image?.label || "Property Image"}
+                          width={64} // Add this
+                          height={64} // Add this
                           className="object-cover w-full h-full"
                         />
                       </button>
                     ))}
                   </div>
                 </div>
+              </div>
+               <div className="flex justify-end">
+                <button
+                  className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+                  onClick={() => window.history.back()}
+                >
+                  Back
+                </button>
               </div>
             </div>
           </div>

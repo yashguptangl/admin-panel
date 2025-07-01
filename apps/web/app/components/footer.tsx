@@ -1,6 +1,6 @@
 "use client"
 import fb from "../assets/fb.png";
-import tw from "../assets/tw.png";
+import ig from "../assets/ig.png";
 import linkdin from "../assets/in.png";
 import Image from "next/image";
 
@@ -30,7 +30,7 @@ export default function Footer() {
         </div>
         <div className="relative h-8 sm:h-10 w-8 sm:w-10">
           <Image 
-          src={tw} 
+          src={ig} 
           alt="Instagram" 
           onClick={() => window.open("https://www.instagram.com/roomlocus/", "_blank")}
           fill 

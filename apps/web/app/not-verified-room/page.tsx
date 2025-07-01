@@ -14,8 +14,8 @@ export default function NotVerifiedRoom() {
         city: string;
         townSector: string;
         BHK: string;
-        MinPrice: string;
-        MaxPrice: string;
+        paymentDone : boolean
+        createdAt: string;
         location: string;
         listingShowNo: string;
         owner?: {
@@ -77,10 +77,11 @@ export default function NotVerifiedRoom() {
                                 <tr>
                                     <th className="border p-2 text-left">Sr No</th>
                                     <th className="border p-2 text-left">Owner Name</th>
+                                    <th className="border p-2 text-left">Date</th>
                                     <th className="border p-2 text-left">City</th>
                                     <th className="border p-2 text-left">Town Sector</th>
                                     <th className="border p-2 text-left">BHK</th>
-                                    <th className="border p-2 text-left">Price</th>
+                                    <th className="border p-2 text-left">Payment</th>
                                     <th className="border p-2 text-left">Location</th>
                                     <th className="border p-2 text-left">Mobile</th>
                                     <th className="border p-2 text-left">Actions</th>
@@ -108,10 +109,11 @@ export default function NotVerifiedRoom() {
                                             <tr key={room.id} className="hover:bg-gray-100">
                                                 <td className="border p-2">{index + 1}</td>
                                                 <td className="border p-2">{room.owner?.username || "-"}</td>
+                                                <td className="border p-2">{new Date(room.createdAt).toLocaleDateString()}</td>
                                                 <td className="border p-2">{room.city}</td>
                                                 <td className="border p-2">{room.townSector}</td>
                                                 <td className="border p-2">{room.BHK}</td>
-                                                <td className="border p-2">{room.MinPrice} - {room.MaxPrice}</td>
+                                                <td className="border p-2">{room.paymentDone ? "Yes" : "No"}</td>
                                                 <td className="border p-2">{room.location}</td>
                                                 <td className="border p-2">{room.owner?.mobile || "-"}</td>
                                                 <td className="border p-2 text-center">

@@ -5,20 +5,18 @@ import Sidebar from "../components/sidebar";
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
-export default function NotVerifiedFlat() {
+export default function VerifiedHourly() {
     const router = useRouter();
-    const [notVerified, setNotVerified] = useState<Flat[]>([]);
+    const [Verified, setVerified] = useState<HourlyRoom[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
-    interface Flat {
+    interface HourlyRoom {
         id: number;
         city: string;
         townSector: string;
-        BHK: string;
-        paymentDone: boolean;
+        verifiedByAdminOrAgent: string;
         listingShowNo: string;
-        createdAt: string;
         location: string;
-        owner?: {
+        Owner?: {
             id: number;
             username: string;
             mobile: string;
@@ -27,16 +25,16 @@ export default function NotVerifiedFlat() {
     }
 
     useEffect(() => {
-        const fetchNotVerifiedFlats = async () => {
+        const fetchVerifiedHourlyRooms = async () => {
             try {
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/admin/not-verified-flat`, {
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/admin/verified-hourlyroom`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
                         token: localStorage.getItem("token"),
                     },
                 });
-                setNotVerified(response.data.notverifiedProperty);
+                setVerified(response.data.verifiedProperty);
             } catch (error) {
                 if (axios.isAxiosError(error) && error.response?.status === 403) {
                     console.log("Authorization error: You are not authorized to view this page.");
@@ -46,7 +44,7 @@ export default function NotVerifiedFlat() {
                 }
             }
         }
-        fetchNotVerifiedFlats();
+        fetchVerifiedHourlyRooms();
     }, []);
 
 
@@ -62,7 +60,7 @@ export default function NotVerifiedFlat() {
                 <div className="flex-grow p-6">
                     {/* Agent Table */}
                     <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-xl font-semibold text-center flex-1">Not Verified Flat List</h2>
+                        <h2 className="text-xl font-semibold text-center flex-1">Verified Hourly Room List</h2>
                         <input
                             type="text"
                             placeholder="Search by Name or Mobile"
@@ -77,50 +75,46 @@ export default function NotVerifiedFlat() {
                                 <tr>
                                     <th className="border p-2 text-left">Sr No</th>
                                     <th className="border p-2 text-left">Owner Name</th>
-                                    <th className="border p-2 text-left">Date</th>
                                     <th className="border p-2 text-left">City</th>
                                     <th className="border p-2 text-left">Town Sector</th>
-                                    <th className="border p-2 text-left">BHK</th>
-                                    <th className="border p-2 text-left">Payment</th>
+                                    <th className="border p-2 text-left">Verified on</th>
                                     <th className="border p-2 text-left">Location</th>
                                     <th className="border p-2 text-left">Mobile</th>
                                     <th className="border p-2 text-left">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {notVerified
-                                    .filter(flat =>
-                                        flat.owner?.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                        flat.owner?.mobile?.includes(searchTerm)
-                                    )
-                                    .length === 0 ? (
+                                {Verified.filter(
+                                    (hourlyroom) =>
+                                        hourlyroom.Owner?.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                        hourlyroom.Owner?.mobile?.includes(searchTerm)
+                                ).length === 0 ? (
                                     <tr>
-                                        <td colSpan={9} className="border p-2 text-center">
+                                        <td colSpan={8} className="border p-2 text-center">
                                             No records found.
                                         </td>
                                     </tr>
                                 ) : (
-                                    notVerified
-                                        .filter(flat =>
-                                            flat.owner?.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                            flat.owner?.mobile?.includes(searchTerm)
+                                    Verified
+                                        .filter(
+                                            (hourlyroom) =>
+                                                hourlyroom.Owner?.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                                hourlyroom.Owner?.mobile?.includes(searchTerm)
                                         )
-                                        .map((flat, index) => (
-                                            <tr key={flat.id} className="hover:bg-gray-100">
+                                        .map((hourlyroom, index) => (
+                                            <tr key={hourlyroom.id} className="hover:bg-gray-100">
                                                 <td className="border p-2">{index + 1}</td>
-                                                <td className="border p-2">{flat.owner?.username || "-"}</td>
-                                                <td className="border p-2">{new Date(flat.createdAt).toLocaleDateString()}</td>
-                                                <td className="border p-2">{flat.city}</td>
-                                                <td className="border p-2">{flat.townSector}</td>
-                                                <td className="border p-2">{flat.BHK}</td>
-                                                <td className="border p-2">{flat.paymentDone ? "Yes" : "No"}</td>
-                                                <td className="border p-2">{flat.location}</td>
-                                                <td className="border p-2">{flat.owner?.mobile || "-"}</td>
+                                                <td className="border p-2">{hourlyroom.Owner?.username || "-"}</td>
+                                                <td className="border p-2">{hourlyroom.city}</td>
+                                                <td className="border p-2">{hourlyroom.townSector}</td>
+                                                <td className="border p-2">{new Date(hourlyroom.verifiedByAdminOrAgent).toLocaleDateString()}</td>
+                                                <td className="border p-2">{hourlyroom.location}</td>
+                                                <td className="border p-2">{hourlyroom.Owner?.mobile || "-"}</td>
                                                 <td className="border p-2 text-center">
                                                     <button
                                                         className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
                                                         onClick={() => {
-                                                            router.push(`/not-verified-flat/id?id=${flat.id}`);
+                                                            router.push(`/verified-hourlyroom/id?id=${hourlyroom.id}`);
                                                         }}
                                                     >
                                                         Open

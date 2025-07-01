@@ -338,6 +338,8 @@ function FullNotVerifiedDetailsRoom() {
                       src={imageArray[activeImageIndex]?.url || "/placeholder.png"}
                       alt={imageArray[activeImageIndex]?.label || "Property Image"}
                       className="w-full h-56 object-cover rounded-lg border"
+                      width={400}
+                      height={224}
                     />
                     <div className="mt-2 text-center text-sm text-gray-700">
                       {imageArray[activeImageIndex]?.label || "Property Image"}
@@ -358,11 +360,21 @@ function FullNotVerifiedDetailsRoom() {
                           src={image?.url || "/placeholder.png"}
                           alt={image?.label || "Property Image"}
                           className="object-cover w-full h-full"
+                          width={64}
+                          height={64}
                         />
                       </button>
                     ))}
                   </div>
                 </div>
+              </div>
+               <div className="flex justify-end">
+                <button
+                  className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+                  onClick={() => window.history.back()}
+                >
+                  Back
+                </button>
               </div>
             </div>
           </div>

@@ -20,112 +20,159 @@ const Sidebar = () => {
       <h2 className="text-xl font-bold mb-6">Admin Panel</h2>
 
       {/* Users */}
-      <div>
-        <button
-          className="flex items-center w-full p-2 hover:bg-gray-700 rounded"
-          onClick={() => navigateTo("/user")}
-        >
-          <FaUsers className="mr-2" /> Users
-        </button>
-      </div>
+      <button
+      className="flex items-center w-full p-2 hover:bg-gray-700 rounded"
+      onClick={() => navigateTo("/user")}
+      >
+      <FaUsers className="mr-2" /> Users
+      </button>
 
-      <div className="mt-4">
-        <button
-          className="flex items-center w-full p-2 hover:bg-gray-700 rounded"
-          onClick={() => navigateTo("owner")}
-
-        >
-          <FaUsers className="mr-2" /> Owners
-        </button>
-      </div>
+      {/* Owners */}
+      <button
+      className="flex items-center w-full p-2 hover:bg-gray-700 rounded mt-4"
+      onClick={() => navigateTo("/owner")}
+      >
+      <FaUsers className="mr-2" /> Owners
+      </button>
 
       {/* Agents */}
       <div className="mt-4">
+      <button
+        className="flex items-center w-full p-2 hover:bg-gray-700 rounded"
+        onClick={() => toggleMenu("agents")}
+      >
+        <FaUserTie className="mr-2" /> Agents
+      </button>
+      {openMenus["agents"] && (
+        <div className="ml-6">
         <button
-          className="flex items-center w-full p-2 hover:bg-gray-700 rounded"
-          onClick={() => toggleMenu("agents")}
+          className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+          onClick={() => navigateTo("/agents-verified")}
         >
-          <FaUserTie className="mr-2" /> Agents
+          Verified
         </button>
-        {openMenus["agents"] && (
-          <div className="ml-6">
-            <button
-              className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
-              onClick={() => navigateTo("/agents-verified")}
-            >
-              Verified
-            </button>
-            <button
-              className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
-              onClick={() => navigateTo("/agents-notverified")}
-            >
-              Not Verified
-            </button>
-          </div>
-        )}
+        <button
+          className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+          onClick={() => navigateTo("/agents-notverified")}
+        >
+          Not Verified
+        </button>
+        </div>
+      )}
       </div>
 
-      {/* Owners */}
+      {/* Verification */}
       <div className="mt-4">
+      <button
+        className="flex items-center w-full p-2 hover:bg-gray-700 rounded"
+        onClick={() => toggleMenu("property")}
+      >
+        <FaHome className="mr-2" /> Verification
+      </button>
+      {openMenus["property"] && (
+        <div className="ml-6">
         <button
-          className="flex items-center w-full p-2 hover:bg-gray-700 rounded"
-          onClick={() => toggleMenu("property")}
+          className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+          onClick={() => navigateTo("/self-verification")}
         >
-          <FaHome className="mr-2" /> Verification
+          Self Verification
         </button>
-        {openMenus["property"] && (
-          <div className="ml-6">
-            <button
-              className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
-              onClick={() => navigateTo("/self-verification")}
-            >
-               Self Verification
-            </button>
-            <button
-              className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
-              onClick={() => navigateTo("/agent-verification")}
-            >
-                Agent Verification
-            </button>
-          </div>
-        )}
+        <button
+          className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+          onClick={() => navigateTo("/agent-verification")}
+        >
+          Agent Verification
+        </button>
+        </div>
+      )}
       </div>
+
+      {/* Not Verified Property */}
       <div className="mt-4">
+      <button
+        className="flex items-center w-full p-2 hover:bg-gray-700 rounded"
+        onClick={() => toggleMenu("not-verified-property")}
+      >
+        <FaHome className="mr-2" /> Not Verified Property
+      </button>
+      {openMenus["not-verified-property"] && (
+        <div className="ml-6">
         <button
-          className="flex items-center w-full p-2 hover:bg-gray-700 rounded"
-          onClick={() => toggleMenu("not-verified-property")}
+          className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+          onClick={() => navigateTo("/not-verified-flat")}
         >
-          <FaHome className="mr-2" /> Not Verified Property
+          Not Verified Flat
         </button>
-        {openMenus["not-verified-property"] && (
-          <div className="ml-6">
-            <button
-              className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
-              onClick={() => navigateTo("/not-verified-flat")}
-            >
-              Not Verified Flat  
-            </button>
-            <button
-              className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
-              onClick={() => navigateTo("/not-verified-pg")}
-            >
-              Not Verified PG
-            </button>
-            <button
-              className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
-              onClick={() => navigateTo("/not-verified-room")}
-            >
-              Not Verified Room
-            </button>
-            <button
-              className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
-              onClick={() => navigateTo("/not-verified-hourlyroom")}
-            >
-              Not Verified Hourly Room
-            </button>
-          </div>
-        )}
+        <button
+          className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+          onClick={() => navigateTo("/not-verified-pg")}
+        >
+          Not Verified PG
+        </button>
+        <button
+          className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+          onClick={() => navigateTo("/not-verified-room")}
+        >
+          Not Verified Room
+        </button>
+        <button
+          className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+          onClick={() => navigateTo("/not-verified-hourlyroom")}
+        >
+          Not Verified Hourly Room
+        </button>
+        </div>
+      )}
       </div>
+
+      {/* Verified Property */}
+      <div className="mt-4">
+      <button
+        className="flex items-center w-full p-2 hover:bg-gray-700 rounded"
+        onClick={() => toggleMenu("verified-property")}
+      >
+        <FaHome className="mr-2" /> Verified Property
+      </button>
+      {openMenus["verified-property"] && (
+        <div className="ml-6">
+        <button
+          className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+          onClick={() => navigateTo("/verified-flat")}
+        >
+          Verified Flat
+        </button>
+        <button
+          className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+          onClick={() => navigateTo("/verified-pg")}
+        >
+          Verified PG
+        </button>
+        <button
+          className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+          onClick={() => navigateTo("/verified-room")}
+        >
+          Verified Room
+        </button>
+        <button
+          className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+          onClick={() => navigateTo("/verified-hourlyroom")}
+        >
+          Verified Hourly Room
+        </button>
+        </div>
+      )}
+      </div>
+
+      {/* Logout Button */}
+      <button
+      className="mt-auto p-2 bg-red-600 hover:bg-red-700 rounded w-full"
+      onClick={() => {
+        localStorage.clear();
+        router.push("/");
+      }}
+      >
+        Logout
+      </button>
     </div>
   );
 };

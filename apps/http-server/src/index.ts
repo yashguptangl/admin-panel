@@ -4,6 +4,7 @@ import AdminAuthRouter from './routes/admin.auth';
 import AgentRouter from './routes/agent';
 import OwnerRouter from './routes/owner';
 import notverifiedProperty from './routes/notVerified';
+import verifiedProperty from './routes/verified';
 
 
 const app = express();
@@ -19,6 +20,7 @@ app.use("/api/v1/admin/",AdminAuthRouter);
 app.use("/api/v1/admin/" , AgentRouter)
 app.use("/api/v1/admin/", OwnerRouter);
 app.use("/api/v1/admin/" , notverifiedProperty)
+app.use("/api/v1/admin/" , verifiedProperty)
 
 
 app.get("/api/health",(req,res) => {

@@ -54,6 +54,7 @@ export default function AgentVerified() {
                                     <th className="border p-2 text-left">#</th>
                                     <th className="border p-2 text-left">Listing Type</th>
                                     <th className="border p-2 text-left">Owner Name</th>
+                                    <th className="border p-2 text-left">Verification Date</th>
                                     <th className="border p-2 text-left">City</th>
                                     <th className="border p-2 text-left">Town Sector</th>
                                     <th className="border p-2 text-left">Location</th>
@@ -75,6 +76,7 @@ export default function AgentVerified() {
                                             <td className="border p-2">{index + 1}</td>
                                             <td className="border p-2 capitalize">{agent.listingType}</td>
                                             <td className="border p-2 capitalize">{agent.owner?.username || "-"}</td>
+                                            <td className="border p-2">{new Date(agent.createdAt).toLocaleDateString()}</td>
                                             <td className="border p-2">{agent.city}</td>
                                             <td className="border p-2">{agent.townSector}</td>
                                             <td className="border p-2">{agent.location}</td>

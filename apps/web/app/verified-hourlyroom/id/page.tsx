@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 import type { HourlyRoomData } from "../../types/data";
 import Image from "next/image";
 
-function FullNotVerifiedDetailsHourlyRoom() {
+function FullVerifiedDetailsHourlyRoom() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const [data, setData] = useState<HourlyRoomData | null>(null);
@@ -25,7 +25,7 @@ function FullNotVerifiedDetailsHourlyRoom() {
     async function fetchHourlyRoomDetails() {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/admin/not-verified-hourlyroom-full-details?id=${id}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/admin/verified-hourlyroom-full-details?id=${id}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -201,6 +201,10 @@ function FullNotVerifiedDetailsHourlyRoom() {
                       <p className="text-sm text-gray-800">Food Available</p>
                       <p className="font-medium">{hourlyRoom.foodAvailable ? "Yes" : "No"}</p>
                     </div>
+                    <div>
+                      <p className="text-sm text-gray-800">Verified on</p>
+                      <p className="font-medium">{hourlyRoom.verifiedByAdminOrAgent}</p>
+                    </div>
                   </div>
                 </div>
 
@@ -327,8 +331,8 @@ function FullNotVerifiedDetailsHourlyRoom() {
                       src={imageArray[activeImageIndex]?.url || "/placeholder.png"}
                       alt={imageArray[activeImageIndex]?.label || "Property Image"}
                       className="w-full h-56 object-cover rounded-lg border"
-                      width={400}
                       height={224}
+                      width={400}
                     />
                     <div className="mt-2 text-center text-sm text-gray-700">
                       {imageArray[activeImageIndex]?.label || "Property Image"}
@@ -349,8 +353,8 @@ function FullNotVerifiedDetailsHourlyRoom() {
                           src={image?.url || "/placeholder.png"}
                           alt={image?.label || "Property Image"}
                           className="object-cover w-full h-full"
-                          width={64}
                           height={64}
+                          width={64}
                         />
                       </button>
                     ))}
@@ -374,10 +378,10 @@ function FullNotVerifiedDetailsHourlyRoom() {
 }
 
 
-const NotVerifiedHourlyRoomDetailsPage = () => (
+const VerifiedHourlyRoomDetailsPage = () => (
   <Suspense fallback={<div className="p-10 text-center">Loading...</div>}>
-    <FullNotVerifiedDetailsHourlyRoom />
+    <FullVerifiedDetailsHourlyRoom />
   </Suspense>
 );
 
-export default NotVerifiedHourlyRoomDetailsPage;
+export default VerifiedHourlyRoomDetailsPage;

@@ -13,8 +13,8 @@ export default function NotVerifiedFlat() {
         id: number;
         city: string;
         townSector: string;
-        MinPrice: string;
-        MaxPrice: string;
+        paymentDone: boolean;
+        createdAt: string;
         listingShowNo: string;
         location: string;
         Owner?: {
@@ -76,9 +76,10 @@ export default function NotVerifiedFlat() {
                                 <tr>
                                     <th className="border p-2 text-left">Sr No</th>
                                     <th className="border p-2 text-left">Owner Name</th>
+                                    <th className="border p-2 text-left">Date</th>
                                     <th className="border p-2 text-left">City</th>
                                     <th className="border p-2 text-left">Town Sector</th>
-                                    <th className="border p-2 text-left">Price</th>
+                                    <th className="border p-2 text-left">Payment</th>
                                     <th className="border p-2 text-left">Location</th>
                                     <th className="border p-2 text-left">Mobile</th>
                                     <th className="border p-2 text-left">Actions</th>
@@ -106,9 +107,10 @@ export default function NotVerifiedFlat() {
                                             <tr key={hourlyroom.id} className="hover:bg-gray-100">
                                                 <td className="border p-2">{index + 1}</td>
                                                 <td className="border p-2">{hourlyroom.Owner?.username || "-"}</td>
+                                                <td className="border p-2">{new Date(hourlyroom.createdAt).toLocaleDateString()}</td>
                                                 <td className="border p-2">{hourlyroom.city}</td>
                                                 <td className="border p-2">{hourlyroom.townSector}</td>
-                                                <td className="border p-2">{hourlyroom.MinPrice} - {hourlyroom.MaxPrice}</td>
+                                                <td className="border p-2">{hourlyroom.paymentDone ? "Yes" : "No"}</td>
                                                 <td className="border p-2">{hourlyroom.location}</td>
                                                 <td className="border p-2">{hourlyroom.Owner?.mobile || "-"}</td>
                                                 <td className="border p-2 text-center">

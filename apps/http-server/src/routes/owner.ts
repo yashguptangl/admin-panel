@@ -48,7 +48,7 @@ OwnerRouter.get("/agentverifiedProperty", authenticate, authorize(['ADMIN', 'EMP
         res.status(500).json({ message: "Internal server error", err });
         return;
     }
-})
+});
 
 OwnerRouter.post("/not-selfverifiedProperty-details/", authenticate, authorize(['ADMIN', 'EMPLOYEE']), async (req, res) => {
     try {
@@ -149,7 +149,7 @@ OwnerRouter.post("/not-selfverifiedProperty-details/", authenticate, authorize([
         res.status(500).json({ message: "Internal server error", err });
         return;
     }
-})
+});
 
 OwnerRouter.post("/agentverifiedProperty-details/", authenticate, authorize(['ADMIN', 'EMPLOYEE']), async (req, res) => {
     try {
@@ -239,7 +239,7 @@ OwnerRouter.post("/agentverifiedProperty-details/", authenticate, authorize(['AD
         res.status(500).json({ message: "Internal server error", err });
         return;
     }
-})
+});
 
 OwnerRouter.put("/self-verified-complete", authenticate, authorize(['ADMIN', 'EMPLOYEE']), async (req, res) => {
     const { id, ownerId, listingType, listingId } = req.query;
@@ -258,6 +258,7 @@ OwnerRouter.put("/self-verified-complete", authenticate, authorize(['ADMIN', 'EM
                     data: {
                         isVerified: true,
                         verificationPending: false,
+                        verifiedByAdminOrAgent : new Date().toISOString(),
                     },
                 });
                 break;
@@ -270,6 +271,7 @@ OwnerRouter.put("/self-verified-complete", authenticate, authorize(['ADMIN', 'EM
                     data: {
                         isVerified: true,
                         verificationPending: false,
+                        verifiedByAdminOrAgent : new Date().toISOString(),
                     }
                 });
                 break;
@@ -278,10 +280,12 @@ OwnerRouter.put("/self-verified-complete", authenticate, authorize(['ADMIN', 'EM
                     where: {
                         ownerId: parseInt(ownerId as string),
                         id: parseInt(listingId as string),
+
                     },
                     data: {
                         isVerified: true,
                         verificationPending: false,
+                        verifiedByAdminOrAgent : new Date().toISOString(),
                     },
                 });
                 break;
@@ -294,6 +298,7 @@ OwnerRouter.put("/self-verified-complete", authenticate, authorize(['ADMIN', 'EM
                     data: {
                         isVerified: true,
                         verificationPending: false,
+                        verifiedByAdminOrAgent : new Date().toISOString(),
                     },
                 });
                 break;
@@ -311,7 +316,7 @@ OwnerRouter.put("/self-verified-complete", authenticate, authorize(['ADMIN', 'EM
         res.status(500).json({ message: "Internal server error", err });
         return;
     }
-})
+});
 
 OwnerRouter.put("/agent-verified-complete", authenticate, authorize(['ADMIN', 'EMPLOYEE']), async (req, res) => {
     const { id, ownerId, listingType, listingId, agentId } = req.query;

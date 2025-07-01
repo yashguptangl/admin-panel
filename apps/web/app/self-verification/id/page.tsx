@@ -21,7 +21,7 @@ const SelfVerificationDetailsPageInner = () => {
         const listingId = searchParams.get("listingId") || "";
 
         const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/not-selfverifiedProperty-details/?id=${id}&ownerId=${ownerId}&listingType=${listingType}&listingId=${listingId}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/admin/not-selfverifiedProperty-details/?id=${id}&ownerId=${ownerId}&listingType=${listingType}&listingId=${listingId}`,
           {},
           {
             headers: {

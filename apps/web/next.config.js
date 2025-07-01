@@ -8,6 +8,7 @@ const nextConfig = {
                 pathname: '**', // Allow all paths under this domain
             },
         ],
+        domains : ['s3.ap-south-1.amazonaws.com'], // Add your allowed domains here
     },
 };
 
