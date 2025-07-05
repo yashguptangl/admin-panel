@@ -337,7 +337,7 @@ OwnerRouter.put("/agent-verified-complete", authenticate, authorize(['ADMIN', 'E
             agentId: agentId as string,
         },
         data: {
-            earnings : {
+            walletRs : {
                 increment: 200
             }
         }

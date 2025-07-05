@@ -7,6 +7,7 @@ import VerifiedRequestItem from "../types/verification"; // Adjust the import pa
 
 export default function SelfVerified() {
     const [selfVerified, setSelfVerified] = useState<VerifiedRequestItem[]>([]);
+    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
     const fetchSelfVerified = async () => {
@@ -44,7 +45,16 @@ export default function SelfVerified() {
                 </div>
                 {/* Main Content */}
                 <div className="flex-grow p-6">
-                    <h2 className="text-xl font-semibold mb-4 text-center">Self Verification List</h2>
+                    <div className="flex items-center justify-between mb-4">
+                        <h2 className="text-xl font-semibold text-center flex-1">Self Verification List</h2>
+                        <input
+                            type="text"
+                            placeholder="Search "
+                            className="w-56 p-2 border border-gray-700 placeholder-gray-800 rounded ml-4"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
                     <div className="overflow-x-auto">
                         <table className="min-w-full border border-gray-300 bg-white shadow-md rounded-lg">
                             <thead className="bg-gray-200">
@@ -68,7 +78,15 @@ export default function SelfVerified() {
                                         </td>
                                     </tr>
                                 ) : (
-                                    selfVerified.map((self, index) => (
+                                    selfVerified.
+                                    filter(self =>
+                                        self.owner?.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                        self.owner?.mobile?.includes(searchTerm) ||
+                                        self.city?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                        self.townSector?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                        self.location?.toLowerCase().includes(searchTerm.toLowerCase()) 
+                                    ).
+                                    map((self, index) => (
                                         <tr key={self.id} className="hover:bg-gray-100">
                                             <td className="border p-2">{index + 1}</td>
                                             <td className="border p-2 capitalize">{self.listingType}</td>

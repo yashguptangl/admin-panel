@@ -54,7 +54,6 @@ model Agent {
   personverifiedName   String
   walletRs             Int                   @default(0)
   role                 String                @default("agent")
-  earnings             Int                   @default(0)
   Agentprogress        Agentprogress?
   VerificationRequests VerificationRequest[]
 }

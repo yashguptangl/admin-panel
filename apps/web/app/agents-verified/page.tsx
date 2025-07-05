@@ -17,6 +17,7 @@ export default function AdminAgentTable() {
   }
 
   const [VerifiedAgents, setVerifiedAgents] = useState<Agent[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -55,7 +56,16 @@ export default function AdminAgentTable() {
         {/* Main Content */}
         <div className="flex-grow p-6">
           {/* Agent Table */}
-          <h2 className="text-xl font-semibold mb-4 text-center">Verified Agent List</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold text-center flex-1">Verified Agent List</h2>
+            <input
+              type="text"
+              placeholder="Search"
+              className="w-56 p-2 border border-gray-700 placeholder-gray-800 rounded ml-4"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
           <div className="overflow-x-auto">
             <table className="min-w-full border border-gray-300 bg-white shadow-md rounded-lg">
               <thead className="bg-gray-200">
@@ -78,7 +88,16 @@ export default function AdminAgentTable() {
                   </td>
                   </tr>
                 ) : (
-                  VerifiedAgents.map((agent) => (
+                  VerifiedAgents.
+                  filter(agent =>
+                    agent.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    agent.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    agent.mobile.includes(searchTerm) || 
+                    agent.agentId.includes(searchTerm) ||
+                    agent.isKYCVerified.toString().includes(searchTerm) ||
+                    agent.isVerifiedByAdmin.toString().includes(searchTerm)
+                  )
+                  .map((agent) => (
                   <tr key={agent.id} className="hover:bg-gray-100">
                     <td className="border p-2">{agent.id}</td>
                     <td className="border p-2">{agent.username}</td>

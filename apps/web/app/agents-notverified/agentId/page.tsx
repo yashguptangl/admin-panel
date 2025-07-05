@@ -173,6 +173,8 @@ function AgentDetailsContent() {
                                     <Image
                                         src={kycDocuments.agentImage}
                                         alt="Agent"
+                                        width={128}
+                                        height={128}
                                         className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md mb-4"
                                     />
                                     <h2 className="text-xl font-semibold">Name: {agent.username}</h2>
@@ -194,7 +196,7 @@ function AgentDetailsContent() {
                                 <div className="bg-white rounded-lg shadow-sm p-6">
                                     <h2 className="text-lg font-semibold mb-4 pb-2 border-b">Bank Details</h2>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        {[
+                                        { agent.Agentprogress ? [
                                             { label: "Bank Name", value: agent.Agentprogress.data.bankName },
                                             { label: "Account Holder", value: agent.Agentprogress.data.accountHolderName },
                                             { label: "Account Number", value: agent.Agentprogress.data.accountNumber },
@@ -206,7 +208,8 @@ function AgentDetailsContent() {
                                                 </label>
                                                 <div className="p-2 bg-gray-50 rounded-md text-gray-800">{item.value}</div>
                                             </div>
-                                        ))}
+                                        )) : <div className="text-gray-500">No bank details available</div>
+                                        }
                                     </div>
                                 </div>
 
@@ -234,6 +237,8 @@ function AgentDetailsContent() {
                                                     <Image
                                                         src={item.url}
                                                         alt={item.label}
+                                                        width={128}
+                                                        height={128}
                                                         className="w-full h-32 object-contain rounded border border-gray-200 bg-gray-100 p-1 hover:shadow-md transition-shadow"
                                                     />
                                                 </a>

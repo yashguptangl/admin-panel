@@ -208,6 +208,8 @@ function AgentDetailsContent() {
                                                     <Image
                                                         src={item.url}
                                                         alt={item.label}
+                                                        width={128}
+                                                        height={128}
                                                         className="w-full h-32 object-contain rounded border border-gray-200 bg-gray-100 p-1 hover:shadow-md transition-shadow"
                                                     />
                                                 </a>

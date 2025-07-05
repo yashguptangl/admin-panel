@@ -11,7 +11,7 @@ const Sidebar = () => {
     setOpenMenus((prev) => ({ ...prev, [menu]: !prev[menu] }));
   };
 
-  const navigateTo = (path : string) => {
+  const navigateTo = (path: string) => {
     router.push(path);
   };
 
@@ -21,155 +21,154 @@ const Sidebar = () => {
 
       {/* Users */}
       <button
-      className="flex items-center w-full p-2 hover:bg-gray-700 rounded"
-      onClick={() => navigateTo("/user")}
+        className="flex items-center w-full p-2 hover:bg-gray-700 rounded"
+        onClick={() => navigateTo("/user")}
       >
-      <FaUsers className="mr-2" /> Users
+        <FaUsers className="mr-2" /> Users
       </button>
 
       {/* Owners */}
       <button
-      className="flex items-center w-full p-2 hover:bg-gray-700 rounded mt-4"
-      onClick={() => navigateTo("/owner")}
+        className="flex items-center w-full p-2 hover:bg-gray-700 rounded mt-4"
+        onClick={() => navigateTo("/owner")}
       >
-      <FaUsers className="mr-2" /> Owners
+        <FaUsers className="mr-2" /> Owners
       </button>
 
       {/* Agents */}
       <div className="mt-4">
-      <button
-        className="flex items-center w-full p-2 hover:bg-gray-700 rounded"
-        onClick={() => toggleMenu("agents")}
-      >
-        <FaUserTie className="mr-2" /> Agents
-      </button>
-      {openMenus["agents"] && (
-        <div className="ml-6">
         <button
-          className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
-          onClick={() => navigateTo("/agents-verified")}
+          className="flex items-center w-full p-2 hover:bg-gray-700 rounded"
+          onClick={() => toggleMenu("agents")}
         >
-          Verified
+          <FaUserTie className="mr-2" /> Agents
         </button>
-        <button
-          className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
-          onClick={() => navigateTo("/agents-notverified")}
-        >
-          Not Verified
-        </button>
-        </div>
-      )}
+        {openMenus["agents"] && (
+          <div className="ml-6">
+            <button
+              className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+              onClick={() => navigateTo("/agents-verified")}
+            >
+              Verified
+            </button>
+            <button
+              className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+              onClick={() => navigateTo("/agents-notverified")}
+            >
+              Not Verified
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Verification */}
       <div className="mt-4">
-      <button
-        className="flex items-center w-full p-2 hover:bg-gray-700 rounded"
-        onClick={() => toggleMenu("property")}
-      >
-        <FaHome className="mr-2" /> Verification
-      </button>
-      {openMenus["property"] && (
-        <div className="ml-6">
         <button
-          className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
-          onClick={() => navigateTo("/self-verification")}
+          className="flex items-center w-full p-2 hover:bg-gray-700 rounded"
+          onClick={() => toggleMenu("property")}
         >
-          Self Verification
+          <FaHome className="mr-2" /> Verification
         </button>
-        <button
-          className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
-          onClick={() => navigateTo("/agent-verification")}
-        >
-          Agent Verification
-        </button>
-        </div>
-      )}
+        {openMenus["property"] && (
+          <div className="ml-6">
+            <button
+              className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+              onClick={() => navigateTo("/self-verification")}
+            >
+              Self Verification
+            </button>
+            <button
+              className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+              onClick={() => navigateTo("/agent-verification")}
+            >
+              Agent Verification
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Not Verified Property */}
       <div className="mt-4">
-      <button
-        className="flex items-center w-full p-2 hover:bg-gray-700 rounded"
-        onClick={() => toggleMenu("not-verified-property")}
-      >
-        <FaHome className="mr-2" /> Not Verified Property
-      </button>
-      {openMenus["not-verified-property"] && (
-        <div className="ml-6">
         <button
-          className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
-          onClick={() => navigateTo("/not-verified-flat")}
+          className="flex items-center w-full p-2 hover:bg-gray-700 rounded"
+          onClick={() => toggleMenu("not-verified-property")}
         >
-          Not Verified Flat
+          <FaHome className="mr-2" /> Not Verified Property
         </button>
-        <button
-          className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
-          onClick={() => navigateTo("/not-verified-pg")}
-        >
-          Not Verified PG
-        </button>
-        <button
-          className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
-          onClick={() => navigateTo("/not-verified-room")}
-        >
-          Not Verified Room
-        </button>
-        <button
-          className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
-          onClick={() => navigateTo("/not-verified-hourlyroom")}
-        >
-          Not Verified Hourly Room
-        </button>
-        </div>
-      )}
+        {openMenus["not-verified-property"] && (
+          <div className="ml-6">
+            <button
+              className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+              onClick={() => navigateTo("/not-verified-flat")}
+            >
+              Flat
+            </button>
+            <button
+              className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+              onClick={() => navigateTo("/not-verified-pg")}
+            >
+              PG
+            </button>
+            <button
+              className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+              onClick={() => navigateTo("/not-verified-room")}
+            >
+              Room
+            </button>
+            <button
+              className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+              onClick={() => navigateTo("/not-verified-hourlyroom")}
+            >
+              Hourly Room
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Verified Property */}
       <div className="mt-4">
-      <button
-        className="flex items-center w-full p-2 hover:bg-gray-700 rounded"
-        onClick={() => toggleMenu("verified-property")}
-      >
-        <FaHome className="mr-2" /> Verified Property
-      </button>
-      {openMenus["verified-property"] && (
-        <div className="ml-6">
         <button
-          className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
-          onClick={() => navigateTo("/verified-flat")}
+          className="flex items-center w-full p-2 hover:bg-gray-700 rounded"
+          onClick={() => toggleMenu("verified-property")}
         >
-          Verified Flat
+          <FaHome className="mr-2" /> Verified Property
         </button>
-        <button
-          className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
-          onClick={() => navigateTo("/verified-pg")}
-        >
-          Verified PG
-        </button>
-        <button
-          className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
-          onClick={() => navigateTo("/verified-room")}
-        >
-          Verified Room
-        </button>
-        <button
-          className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
-          onClick={() => navigateTo("/verified-hourlyroom")}
-        >
-          Verified Hourly Room
-        </button>
-        </div>
-      )}
+        {openMenus["verified-property"] && (
+          <div className="ml-6">
+            <button
+              className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+              onClick={() => navigateTo("/verified-flat")}
+            >
+              Flat
+            </button>
+            <button
+              className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+              onClick={() => navigateTo("/verified-pg")}
+            >
+              PG
+            </button>
+            <button
+              className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+              onClick={() => navigateTo("/verified-room")}
+            >
+              Room
+            </button>
+            <button
+              className="block w-full p-2 text-sm hover:bg-gray-700 rounded"
+              onClick={() => navigateTo("/verified-hourlyroom")}
+            >
+              Hourly Room
+            </button>
+          </div>
+        )}
       </div>
-
       {/* Logout Button */}
       <button
-      className="mt-auto p-2 bg-red-600 hover:bg-red-700 rounded w-full"
-      onClick={() => {
-        localStorage.clear();
-        router.push("/");
-      }}
+        className="mt-auto w-full p-2 bg-red-600 hover:bg-red-700 rounded"
+        onClick={() => {
+          localStorage.removeItem("token");
+          router.push("/login");
+        }}
       >
         Logout
       </button>

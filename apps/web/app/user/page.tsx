@@ -13,6 +13,7 @@ export default function AdminUserTable() {
   }
 
   const [users, setUsers] = useState<User[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -47,7 +48,16 @@ export default function AdminUserTable() {
 
         {/* Main Content */}
         <div className="flex-grow p-6">
-          <h2 className="text-xl font-semibold mb-4 text-center">User List</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold text-center flex-1">User List</h2>
+            <input
+              type="text"
+              placeholder="Search"
+              className="w-56 p-2 border border-gray-700 placeholder-gray-800 rounded ml-4"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
           <div className="overflow-x-auto">
             <table className="min-w-full border border-gray-300 bg-white shadow-md rounded-lg">
               <thead className="bg-gray-200">
@@ -59,7 +69,12 @@ export default function AdminUserTable() {
                 </tr>
               </thead>
               <tbody>
-                {users.map((user) => (
+                {users.
+                filter(user =>
+                  user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                  user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                  user.mobile.includes(searchTerm)
+                ).map((user) => (
                     <tr key={user.id} className="hover:bg-gray-100">
                     <td className="border p-2">{user.id}</td>
                     <td className="border p-2">{user.username}</td>
