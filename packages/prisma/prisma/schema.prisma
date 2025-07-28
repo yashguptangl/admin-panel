@@ -11,7 +11,7 @@ datasource db {
 model User {
   id              Int          @id @default(autoincrement())
   username        String
-  email           String
+  email           String       @unique
   mobile          String       @unique
   password        String
   otp             Int
@@ -54,6 +54,7 @@ model Agent {
   personverifiedName   String
   walletRs             Int                   @default(0)
   role                 String                @default("agent")
+  isProfileComplete    Boolean               @default(false)
   Agentprogress        Agentprogress?
   VerificationRequests VerificationRequest[]
 }
@@ -77,15 +78,9 @@ model FlatInfo {
   location               String
   landmark               String
   BHK                    String
-  MaxPrice               String
-  MinPrice               String
   Offer                  String
-  security               String
-  maintenance            String
   totalFlat              Int
   Adress                 String
-  waterSupply            String
-  powerBackup            String
   noticePeriod           String
   furnishingType         String
   accomoType             String
@@ -95,7 +90,6 @@ model FlatInfo {
   genderPrefer           String
   flatType               String
   careTaker              String
-  listingShowNo          String
   flatInside             String[]
   flatOutside            String[]
   isVerified             Boolean  @default(false)
@@ -105,9 +99,20 @@ model FlatInfo {
   isDraft                Boolean
   updatedByOwner         DateTime
   verifiedByAdminOrAgent DateTime
-  totalFloor             String
   postPropertyByAdmin    Boolean  @default(false)
   createdAt              DateTime @default(now())
+  MaxPrice               Int
+  MinPrice               Int
+  security               Int
+  maintenance            Int
+  waterSupply            Int
+  powerBackup            Int
+  listingShowNo          String
+  totalFloor             Int
+  AdressByAPI            String
+  isLiveLocation         Boolean  @default(false)
+  latitude               Decimal
+  longitude              Decimal
   owner                  Owner    @relation(fields: [ownerId], references: [id])
 }
 
@@ -120,17 +125,11 @@ model PgInfo {
   location               String
   landmark               String
   BHK                    String
-  MinPrice               String
-  MaxPrice               String
   adress                 String
   Offer                  String
-  security               String
-  maintenance            String
   totalPG                Int
-  waterSupply            String
   PGType                 String
   bedCount               Int
-  powerBackup            String
   noticePeriod           String
   furnishingType         String
   accomoType             String
@@ -142,7 +141,6 @@ model PgInfo {
   PGInside               String[]
   PGOutside              String[]
   careTaker              String
-  listingShowNo          String
   isVerified             Boolean  @default(false)
   verificationPending    Boolean  @default(true)
   paymentDone            Boolean  @default(false)
@@ -150,9 +148,20 @@ model PgInfo {
   isDraft                Boolean
   updatedByOwner         DateTime
   verifiedByAdminOrAgent DateTime
-  totalFloor             String
   postPropertyByAdmin    Boolean  @default(false)
   createdAt              DateTime @default(now())
+  MinPrice               Int
+  MaxPrice               Int
+  security               Int
+  maintenance            Int
+  waterSupply            Int
+  powerBackup            Int
+  listingShowNo          String
+  totalFloor             Int
+  AdressByAPI            String
+  isLiveLocation         Boolean  @default(false)
+  latitude               Decimal
+  longitude              Decimal
   owner                  Owner    @relation(fields: [ownerId], references: [id])
 }
 
@@ -165,16 +174,10 @@ model RoomInfo {
   location               String
   BHK                    String
   landmark               String
-  MinPrice               String
-  MaxPrice               String
   Offer                  String
   adress                 String
-  security               String
-  maintenance            String
   totalRoom              Int
-  powerBackup            String
   noticePeriod           String
-  waterSupply            String
   furnishingType         String
   accomoType             String
   parking                String[]
@@ -184,7 +187,6 @@ model RoomInfo {
   roomInside             String[]
   roomOutside            String[]
   careTaker              String
-  listingShowNo          String
   RoomAvailable          String
   isVerified             Boolean  @default(false)
   verificationPending    Boolean  @default(true)
@@ -193,9 +195,20 @@ model RoomInfo {
   isDraft                Boolean
   updatedByOwner         DateTime
   verifiedByAdminOrAgent DateTime
-  totalFloor             String
   postPropertyByAdmin    Boolean  @default(false)
   createdAt              DateTime @default(now())
+  MinPrice               Int
+  MaxPrice               Int
+  security               Int
+  maintenance            Int
+  powerBackup            Int
+  waterSupply            Int
+  listingShowNo          String
+  totalFloor             Int
+  AdressByAPI            String
+  isLiveLocation         Boolean  @default(false)
+  latitude               Decimal
+  longitude              Decimal
   owner                  Owner    @relation(fields: [ownerId], references: [id])
 }
 
@@ -271,11 +284,8 @@ model hourlyInfo {
   landmark               String
   palaceName             String
   BedCount               Int
-  MinPrice               String
-  MaxPrice               String
   adress                 String
   totalRoom              Int
-  totalFloor             String
   noofGuests             Int
   furnishingType         String
   accomoType             String
@@ -296,28 +306,48 @@ model hourlyInfo {
   updatedByOwner         DateTime
   verifiedByAdminOrAgent DateTime
   postPropertyByAdmin    Boolean  @default(false)
-  listingShowNo          String
   createdAt              DateTime @default(now())
   luxury                 String
+  MinPrice               Int
+  MaxPrice               Int
+  totalFloor             Int
+  listingShowNo          String
+  AdressByAPI            String   @default("")
+  isLiveLocation         Boolean  @default(false)
+  latitude               Decimal  @default(0)
+  longitude              Decimal  @default(0)
   Owner                  Owner    @relation(fields: [ownerId], references: [id])
 }
 
 model Payment {
-  id            String  @id
-  orderId       String  @unique
-  listingId     String
-  listingType   String
-  email         String
-  phone         String
-  amount        Float
-  status        String
-  city          String?
-  townSector    String?
-  address       String?
-  location      String?
-  listingShowNo String?
-  leadCount     Int?
-  leadPrice     Float?
+  id                String   @id
+  orderId           String   @unique
+  listingId         String?
+  listingType       String?
+  email             String
+  phone             String
+  amount            Float
+  status            String
+  city              String?
+  townSector        String?
+  address           String?
+  location          String?
+  listingShowNo     String?
+  leadCount         Int?
+  leadPrice         Float?
+  createdAt         DateTime @default(now())
+  razorpayOrderId   String?  @unique
+  razorpayPaymentId String?  @unique
+  updatedAt         DateTime
+}
+
+model TempMobileVerification {
+  id        Int      @id @default(autoincrement())
+  mobile    String   @unique
+  otp       Int
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  expiresAt DateTime
 }
 
 enum Role {

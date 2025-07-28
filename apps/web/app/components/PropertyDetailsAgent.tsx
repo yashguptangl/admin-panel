@@ -24,7 +24,7 @@ const PropertyDetailsPageAgent: React.FC<{ property: PropertyDetails , owner?:Ow
         const id = localStorage.getItem("id");
         try {
             const res = await fetch(
-                `http://localhost:3001/api/v1/admin/agent-verified-complete?id=${id}&ownerId=${property.ownerId}&listingType=${property.Type.toLowerCase()}&listingId=${property.id}&agentId=${localStorage.getItem("agentId")}`,
+                `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/admin/agent-verified-complete?id=${id}&ownerId=${property.ownerId}&listingType=${property.Type.toLowerCase()}&listingId=${property.id}&agentId=${localStorage.getItem("agentId")}`,
                 {
                     method: "PUT",
                     headers: {
@@ -49,7 +49,7 @@ const PropertyDetailsPageAgent: React.FC<{ property: PropertyDetails , owner?:Ow
         const id = localStorage.getItem("id");
         try {
             const res = await fetch(
-                `http://localhost:3001/api/v1/admin/agent-verified-not-pay?id=${id}&ownerId=${property.ownerId}&listingType=${property.Type.toLowerCase()}&listingId=${property.id}&agentId=${localStorage.getItem("agentId")}`,
+                `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/admin/agent-verified-not-pay?id=${id}&ownerId=${property.ownerId}&listingType=${property.Type.toLowerCase()}&listingId=${property.id}&agentId=${localStorage.getItem("agentId")}`,
                 {
                     method: "PUT",
                     headers: {

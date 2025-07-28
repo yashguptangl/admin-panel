@@ -24,7 +24,7 @@ const PropertyDetailsPage: React.FC<{ property: PropertyDetails , owner?:Owner }
         const id = localStorage.getItem("id");
         try {
             const res = await fetch(
-                `http://localhost:3001/api/v1/admin/self-verified-complete?id=${id}&ownerId=${property.ownerId}&listingType=${property.Type.toLowerCase()}&listingId=${property.id}`,
+                `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/admin/self-verified-complete?id=${id}&ownerId=${property.ownerId}&listingType=${property.Type.toLowerCase()}&listingId=${property.id}`,
                 {
                     method: "PUT",
                     headers: {

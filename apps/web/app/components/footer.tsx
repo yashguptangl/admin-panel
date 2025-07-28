@@ -7,8 +7,6 @@ import Image from "next/image";
 export default function Footer() {
   return (
     <div className="flex flex-col items-center bg-gray-400 w-full gap-4  relative bottom-0 ">
-      <p className="text-sm sm:text-base">English</p>
-      <p className="text-sm sm:text-base">+91-9719507080</p>
       <p className="text-sm sm:text-base">info@roomlocus.com</p>
 
       <div className="relative flex justify-center gap-5">
