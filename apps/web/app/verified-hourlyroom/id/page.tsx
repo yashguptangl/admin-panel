@@ -237,6 +237,10 @@ function FullVerifiedDetailsHourlyRoom() {
                         <p className="text-sm text-gray-800">Town/Sector</p>
                         <p className="font-medium">{hourlyRoom.townSector}</p>
                       </div>
+                      <div>
+                        <p className="text-sm text-gray-800">Adress By API</p>
+                        <p className="font-medium">{hourlyRoom.AdressByAPI}</p>
+                      </div>
                     </div>
                   </div>
                 </div>

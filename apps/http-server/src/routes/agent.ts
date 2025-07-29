@@ -119,4 +119,13 @@ AgentRouter.get("/agents/details", authenticate, authorize(['ADMIN', 'EMPLOYEE']
   }
 });
 
+AgentRouter.get("/agents-wallet", authenticate, authorize(['ADMIN']), async (req, res) => {
+  try{
+    const agents = await prisma.agent.findMany();
+    res.status(200).json({ agents, message: "All agents fetched successfully" });
+  }catch(err){
+    res.status(500).json({message : "Internal server error", err});
+  }
+});
+
 export default AgentRouter;

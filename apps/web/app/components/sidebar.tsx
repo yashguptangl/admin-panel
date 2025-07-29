@@ -162,7 +162,15 @@ const Sidebar = () => {
           </div>
         )}
       </div>
-      {/* Logout Button */}
+
+      {/* Agent Wallet */}
+      <button
+        className="flex items-center w-full p-2 hover:bg-gray-700 rounded mt-4"
+        onClick={() => navigateTo("/agents-wallet-details")}
+      >
+        <FaUsers className="mr-2" /> Agent Wallet
+      </button>
+
       <button
         className="mt-auto w-full p-2 bg-red-600 hover:bg-red-700 rounded"
         onClick={() => {

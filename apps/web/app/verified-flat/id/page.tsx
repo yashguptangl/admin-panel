@@ -4,7 +4,7 @@ import Header from "../../components/header";
 import Sidebar from "../../components/sidebar";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
-import FlatData from "../../types/data"; 
+import FlatData from "../../types/data";
 import Image from "next/image";
 
 function FullVerifiedDetailsFlat() {
@@ -121,17 +121,16 @@ function FullVerifiedDetailsFlat() {
                 {flat.Type} in {flat.location}, {flat.city} {flat.townSector}
               </h1>
               <span
-                className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  flat.isVerified
+                className={`px-3 py-1 rounded-full text-sm font-medium ${flat.isVerified
                     ? "bg-green-100 text-green-800"
                     : "bg-yellow-100 text-yellow-800"
-                }`}
+                  }`}
               >
                 {flat.isVerified ? "Verified" : "Not Verified"}
               </span>
             </div>
 
-            
+
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Main Details */}
@@ -245,13 +244,18 @@ function FullVerifiedDetailsFlat() {
                         <p className="text-sm text-gray-800">Town/Sector</p>
                         <p className="font-medium">{flat.townSector}</p>
                       </div>
+                      <div>
+                        <p className="text-sm text-gray-800">Adress By API</p>
+                        <p className="font-medium">{flat.AdressByAPI}</p>
+                      </div>
                     </div>
+
                   </div>
                 </div>
               </div>
-              
-              
-              
+
+
+
 
               {/* Sidebar */}
               <div className="space-y-6">
@@ -333,11 +337,12 @@ function FullVerifiedDetailsFlat() {
                       <p className="text-sm text-gray-800">Verified on </p>
                       <p className="font-medium">{flat.verifiedByAdminOrAgent}</p>
                     </div>
+              
                   </div>
                 </div>
-                
+
               </div>
-              
+
             </div>
             {/* Image Gallery Section */}
             <div className="bg-white rounded-xl shadow-sm p-6 mb-6 mt-3">
@@ -371,9 +376,8 @@ function FullVerifiedDetailsFlat() {
                       <button
                         key={index}
                         onClick={() => setActiveImageIndex(index)}
-                        className={`border rounded-md overflow-hidden w-16 h-16 p-0 ${
-                          activeImageIndex === index ? "ring-2 ring-blue-500" : ""
-                        }`}
+                        className={`border rounded-md overflow-hidden w-16 h-16 p-0 ${activeImageIndex === index ? "ring-2 ring-blue-500" : ""
+                          }`}
                         type="button"
                       >
                         <Image
@@ -386,7 +390,7 @@ function FullVerifiedDetailsFlat() {
                       </button>
                     ))}
                   </div>
-                </div>   
+                </div>
               </div>
               <div className="flex justify-end">
                 <button

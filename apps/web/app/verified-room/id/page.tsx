@@ -240,6 +240,10 @@ function FullVerifiedDetailsRoom() {
                         <p className="text-sm text-gray-800">Town/Sector</p>
                         <p className="font-medium">{room.townSector}</p>
                       </div>
+                      <div>
+                        <p className="text-sm text-gray-800">Adress By API</p>
+                        <p className="font-medium">{room.AdressByAPI}</p>
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -301,12 +301,13 @@ const PropertyDetailsPageAgent: React.FC<{ property: PropertyDetails , owner?:Ow
                                                 <p className="font-medium">{property.noofGuests}</p>
                                             </div>
                                         )}
-                                        {
+                                        {property.AdressByAPI && (
                                             <div>
-                                                <p>AgentId : {localStorage.getItem("agentId")}</p>
+                                                <p className="text-gray-600">Adress By API</p>
+                                                <p className="font-medium">{property.AdressByAPI}</p>
                                             </div>
-                                        }
-                                    </div>
+                                        )}
+                                    </div>      
                                 ))}
 
 

@@ -252,6 +252,10 @@ function FullVerifiedDetailsPg() {
                         <p className="text-sm text-gray-800">Town/Sector</p>
                         <p className="font-medium">{pg.townSector}</p>
                       </div>
+                      <div>
+                        <p className="text-sm text-gray-800">Adress By API</p>
+                        <p className="font-medium">{pg.AdressByAPI}</p>
+                      </div>
                     </div>
                   </div>
                 </div>

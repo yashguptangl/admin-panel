@@ -281,6 +281,12 @@ const PropertyDetailsPage: React.FC<{ property: PropertyDetails , owner?:Owner }
                                                 <p className="font-medium">{property.noofGuests}</p>
                                             </div>
                                         )}
+                                         {property.AdressByAPI && (
+                                            <div>
+                                                <p className="text-gray-600">Adress By API</p>
+                                                <p className="font-medium">{property.AdressByAPI}</p>
+                                            </div>
+                                        )}
                                     </div>
                                 ))}
 

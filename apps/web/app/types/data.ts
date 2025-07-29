@@ -59,11 +59,13 @@ export default interface FlatData {
     isVisible: boolean;
     isDraft: boolean;
     updatedByOwner: string;
+    AdressByAPI   : string;
     verifiedByAdminOrAgent: string;
   };
   images: Images;
   owner: Owner;
   message: string;
+  verificationBy?: { agentId: string; agentName: string } | "self" | null;
 }
 
 
@@ -104,10 +106,12 @@ export interface HourlyRoomData {
     verifiedByAdminOrAgent: string;
     postPropertyByAdmin: boolean;
     listingShowNo: string;
+    AdressByAPI: string;
   };
   owner: HourlyRoomOwner;
   images: Images;
   message: string;
+  verificationBy?: { agentId: string; agentName: string } | "self" | null;
 }
 
 export interface PgOwner extends Owner {
@@ -168,10 +172,13 @@ export interface PgData {
     verifiedByAdminOrAgent: string;
     totalFloor: string;
     postPropertyByAdmin: boolean;
+    AdressByAPI: string;
   };
   owner: PgOwner;
   images: PgImages;
   message: string;
+  
+  verificationBy?: { agentId: string; agentName: string } | "self" | null;
 }
 
 
@@ -231,8 +238,11 @@ export interface RoomData {
     verifiedByAdminOrAgent: string;
     totalFloor: string;
     postPropertyByAdmin: boolean;
+    AdressByAPI: string;
+
   };
   owner: RoomOwner;
   images: RoomImages;
   message: string;
+  verificationBy?: { agentId: string; agentName: string } | "self" | null;
 }

@@ -4,6 +4,7 @@ export type PropertyDetails = {
   ownerId: number;
   Type: string;
   city: string;
+  AdressByAPI?: string;
   townSector: string;
   location: string;
   landmark?: string;
